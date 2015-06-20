@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>{E338DC66-A110-48EC-9F4F-7779CEC694EF}</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>DD.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)DDAudio.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DDColor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DDDebug.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DDDirector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DDDisposable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DDFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DDFont.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DDJson.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DDLinq.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DDMath.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DDMatrix.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DDPhysicsLayer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DDRectangle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DDRenderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DDScheduler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DDTexture.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DDTextureFrame.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DDTextureManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DDTouchDispatcher.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DDVector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DDXml.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\DDActionBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\DDActionManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\DDAnimation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\DDAnimations.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\DDPlayClip.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\DDPlayEffect.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDActionEase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDEase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDEaseBackIn.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDEaseBackInOut.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDEaseBackOut.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDEaseBounce.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDEaseBounceIn.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDEaseBounceInOut.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDEaseBounceOut.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDEaseElastic.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDEaseElasticIn.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDEaseElasticInOut.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDEaseElasticOut.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDEaseExponentialIn.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDEaseExponentialInOut.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDEaseExponentialOut.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDEaseIn.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDEaseInOut.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDEaseOut.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDEaseRateAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDEaseSineIn.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDEaseSineInOut.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDEaseSineOut.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDEaseTimeScale.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nodes\DDFlashClip.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nodes\DDLabel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nodes\DDNode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nodes\DDNodeAnimations.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nodes\DDNodeCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nodes\DDScene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nodes\DDSlicedSprite.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nodes\DDSprite.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nodes\DDSurface.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nodes\DDUserData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Android\DDDirector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Android\DDFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Android\DDRenderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Android\DDTexture.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\iOS\DDDirector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\iOS\DDFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\iOS\DDTexture.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Unity3d\DDDirector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Unity3d\DDFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Unity3d\DDMusicHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Unity3d\DDRenderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Unity3d\DDTexture.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Win32\DDDirector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Win32\DDFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Win32\DDRenderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Win32\DDTexture.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\DDActivityIndicatorView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\DDButtonView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\DDImageView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\DDKeyboardView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\DDNavigationView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\DDScrollView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\DDTextInputView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\DDTextView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\DDVerticalFlowView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\DDView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\DDViewCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\DDWindow.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)DDShader.shader" />
+    <None Include="$(MSBuildThisFileDirectory)DDShaderRGB+A.shader" />
+    <None Include="$(MSBuildThisFileDirectory)DDShaderRGB+A+M.shader" />
+    <None Include="$(MSBuildThisFileDirectory)DDShaderRGBA+M.shader" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Actions\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Actions\Ease\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Nodes\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Platforms\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Views\" />
+  </ItemGroup>
+</Project>

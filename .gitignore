@@ -1,0 +1,5 @@
+Src/DD.Library.Xamarin.Android/bin/
+Src/DD.Library.Xamarin.Android/obj/
+*.userprefs
+Src/Demo.Xamarin.Android/bin/
+Src/Demo.Xamarin.Android/obj/
