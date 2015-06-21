@@ -51,7 +51,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
-    <None Include="Assets\AboutAssets.txt" />
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -73,5 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\block.png" />
+    <AndroidAsset Include="Assets\roboto.png" />
+    <AndroidAsset Include="Assets\roboto_fnt.txt" />
   </ItemGroup>
 </Project>

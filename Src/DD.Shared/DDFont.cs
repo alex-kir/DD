@@ -194,11 +194,22 @@ public class DDFont
             quad.xy3 = mm.TransformPoint(new DDVector(info.Width, info.Height));
             quad.xy4 = mm.TransformPoint(new DDVector(info.Width, 0));
 
+            #if DD_PLATFORM_ANDROID
+
+            quad.uv1 = uv.LeftTop;
+            quad.uv2 = uv.LeftBottom;
+            quad.uv3 = uv.RightBottom;
+            quad.uv4 = uv.RightTop;
+			
+            #else
+
             quad.uv1 = uv.LeftBottom;
             quad.uv2 = uv.LeftTop;
             quad.uv3 = uv.RightTop;
             quad.uv4 = uv.RightBottom;
-			
+
+            #endif
+
 			quad.white_color1 = DDColor.White;
 			quad.white_color2 = DDColor.White;
 			quad.white_color3 = DDColor.White;

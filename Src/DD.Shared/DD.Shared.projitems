@@ -98,6 +98,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Views\DDView.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\DDViewCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\DDWindow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DDUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)DDShader.shader" />

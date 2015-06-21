@@ -23,6 +23,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 //
+using System.Linq;
+
+
 #if DD_PLATFORM_ANDROID
 
 using System;
@@ -138,6 +141,30 @@ public partial class DDDirector
                     ret = true;
                 }
             }
+
+            // -----------------------------------------
+
+            var touches = Enumerable.Range(0, e.PointerCount)
+                .Select(it => {
+                    int id = e.GetPointerId(it);
+                    float x = e.GetX(it);
+                    float y = Height - e.GetY(it);
+
+                    var touch = new DDTouch();
+                    touch.Position = new DDVector(x,y);
+                    touch.Finger = id;
+
+                    if (e.ActionMasked == MotionEventActions.Down)
+                        touch.Phase = DDTouchPhase.Began;
+                    else if(e.Action == MotionEventActions.Move)
+                        touch.Phase = DDTouchPhase.Moved;
+                    else if (e.Action == MotionEventActions.Up)
+                        touch.Phase = DDTouchPhase.Ended;
+                    return touch;
+                }).ToArray();
+
+            DDTouchDispatcher.Instance.OnTouches(touches);
+
             ret = true;
             return ret;// base.OnTouchEvent(e);
         }
@@ -173,7 +200,10 @@ public partial class DDDirector
         _glView = new GLView(this.Activity, rndr);
         this.Activity.SetContentView(_glView);
 
+        DPI = DDUtils.GetDPI();
+        DDTouchDispatcher.Instance.GetHashCode();
         _initialScene = scene;
+
     }
 
     public void OnPause(Activity activity1)
