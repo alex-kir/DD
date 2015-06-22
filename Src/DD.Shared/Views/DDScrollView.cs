@@ -209,9 +209,15 @@ public class DDScrollView : DDView
         _contentView.Position = TrimPosition(_contentView.Position);
     }
 
-    internal void ScrollTo(float x, float y)
+    private void ScrollTo(float x, float y)
     {
         var rt = GetTrimingRect();
         _contentView.SetPosition(DDMath.Lerp(rt.Left, rt.Right, x), DDMath.Lerp(rt.Top, rt.Bottom, y));
+    }
+
+    public void ScrollToStart()
+    {
+        var rt = GetTrimingRect();
+        _contentView.SetPosition(DDMath.Lerp(rt.Left, rt.Right, 0.5f), DDMath.Lerp(rt.Top, rt.Bottom, 1));
     }
 }
