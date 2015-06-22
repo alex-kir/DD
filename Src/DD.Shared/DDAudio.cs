@@ -342,7 +342,7 @@ class DDAudio
 
     public void PlayEffect(string name)
     {
-        throw new NotImplementedException();
+        // TODO: throw new NotImplementedException();
     }
 #else
     public float MusicVolume { set { } }

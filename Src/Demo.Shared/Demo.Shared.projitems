@@ -10,5 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)MyScene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HomePage.cs" />
   </ItemGroup>
 </Project>

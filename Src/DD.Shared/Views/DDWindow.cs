@@ -28,7 +28,8 @@ using System.Collections;
 
 public class DDWindow : DDScene
 {
-	public float DPI = 132; // iPad 1 ppi
+//	public float DPI = 132; // iPad 1 ppi
+    public float DPI = 160;
 
     DDView _windowView;
 
@@ -76,6 +77,7 @@ public class DDWindow : DDScene
         this.Size = DDDirector.Instance.WinSize;
         _windowView = this.Children.Add(new DDView(this.Size.Width, this.Size.Height));
         _windowView.Position = this.Size * DDVector.CenterMiddle;
+        OnUpdate();
 
         this.StartAction(aa => aa.Update(OnUpdate));
 		DDTouchDispatcher.Instance.AddHandler(this, 0, OnTouches);

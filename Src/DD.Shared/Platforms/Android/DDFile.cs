@@ -50,14 +50,15 @@ public partial class DDFile
 
         if (!_assersList.Contains(name))
             name = _assersList.FirstOrDefault(it => it.StartsWith(name + ".", StringComparison.InvariantCultureIgnoreCase));
-
-        using (var stream = DDDirector.Instance.Activity.Assets.Open(name))
+        if (name != null)
         {
-            var ms = new MemoryStream();
-            stream.CopyTo(ms);
-            bytes = ms.ToArray();
+            using (var stream = DDDirector.Instance.Activity.Assets.Open(name))
+            {
+                var ms = new MemoryStream();
+                stream.CopyTo(ms);
+                bytes = ms.ToArray();
+            }
         }
-
         return bytes;
     }
 

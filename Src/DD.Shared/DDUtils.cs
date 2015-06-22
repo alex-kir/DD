@@ -10,7 +10,18 @@ public static class DDUtils
         #else
         return 160;
         #endif
+
     }
 
+    public static string Format(this string self, params object [] args)
+    {
+        return string.Format(self, args);
+    }
+
+    public static T Assign<T>(this T self, ref T variable)
+    {
+        variable = self;
+        return self;
+    }
 }
 

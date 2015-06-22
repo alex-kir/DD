@@ -61,8 +61,8 @@ public class DDVerticalFlowView : DDView
 
 	public override void OnAfterResize ()
 	{
+        AutoArrageSubviews();
 		base.OnAfterResize ();
-		AutoArrageSubviews();
 	}
 
     private void AutoArrageSubviews()
@@ -75,7 +75,7 @@ public class DDVerticalFlowView : DDView
             view.ResizeView(this.Size.Width, view.Size.Height);
             y += view.Size.Height + 1;
         }
-        this.SetSize(this.Size.Width, y);
+        ResizeView(new DDVector(this.Size.Width, y));
         _subviews = SubViews.ToList();
         _subviewLowerBounds = _subviews.DDSelect(it => it.Position.Y - it.Size.Y).ToArray();
     }
