@@ -36,6 +36,7 @@ public partial class DDRenderer
     internal void BeginScene()
     {
         screenRect = new DDRectangle(DDVector.Zero, DDDirector.Instance.WinSize);
+
     }
 
     internal void EndScene()

@@ -108,7 +108,7 @@ public partial class DDDirector
             GL.ClearColor(0f, 0f, 0f, 1.0f);
             //GL.Clear((uint)All.ColorBufferBit);
             GL.Clear(ClearBufferMask.ColorBufferBit);
-
+            GL.Disable(All.DepthTest);
             GL.Disable(All.Lighting);
 
             DDDirector.Instance.OnDraw(renderer);

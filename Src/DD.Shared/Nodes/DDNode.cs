@@ -132,39 +132,46 @@ public partial class DDNode : IDisposable
         set { ScaleXY = new DDVector(value, value); }
     }
 	
-	public void SetScale(float scaleX, float scaleY)
+    public DDNode SetScale(float scaleX, float scaleY)
 	{
 		ScaleXY = new DDVector(scaleX, scaleY);
+        return this;
 	}
 
-    public void SetScale(DDVector scale)
+    public DDNode SetScale(DDVector scale)
 	{
 		ScaleXY = scale;
+        return this;
 	}
 
-	public void SetScale(float scale)
+    public DDNode SetScale(float scale)
 	{
 		ScaleXY = new DDVector(scale, scale);
+        return this;
 	}
 
-    public void SetScaleIn(float width, float height)
+    public DDNode SetScaleIn(float width, float height)
     {
         this.SetScaleIn(new DDVector(width, height));
+        return this;
     }
 
-    public void SetScaleIn(DDVector size)
+    public DDNode SetScaleIn(DDVector size)
     {
         this.Scale = DDMath.MinXOrY(size / this.Size);
+        return this;
     }
 
-	public void SetScaleFill(float width, float height)
+    public DDNode SetScaleFill(float width, float height)
 	{
 		this.SetScaleFill(new DDVector(width, height));
+        return this;
 	}
 
-	public void SetScaleFill(DDVector size)
+    public DDNode SetScaleFill(DDVector size)
 	{
 		this.ScaleXY = size / this.Size;
+        return this;
 	}
 
 

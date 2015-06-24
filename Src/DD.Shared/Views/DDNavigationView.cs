@@ -33,24 +33,24 @@ public class DDNavigationView : DDView
 	public class Page : DDView
 	{
 		internal protected DDNavigationView NavigationView;
-		internal protected DDButtonView backButton;
-		DDSprite header;
+//		internal protected DDButtonView backButton;
+//		DDSprite header;
 		DDView content;
 
 		public Page(float width, float height) : base(width, height)
 		{
-			backButton = new DDButtonView("", 32, 32);
-			backButton.ZOrder = 1000;
-			backButton.SetPosition(25, height - 25);
-			backButton.SetBackgroundImage("DDNavigationView_Back", false);
-			backButton.Action = () => NavigationView.PopView();
-			backButton.AutoresizingMask = Autoresizing.Bottom | Autoresizing.Right;
-			SubViews.Add(backButton);
-			
-            header = this.Children.Add(new DDSprite("DDNavigationViewHeader"), 999);
-			header.SetPosition(Size.Width / 2, Size.Height - 25);
-			header.ScaleXY = new DDVector(Size.Width, 50) / header.Size;
-			header.Color = new DDColor(0.94f, 0.94f, 0.94f);
+//			backButton = new DDButtonView("Закрыть", 32, 32);
+//			backButton.ZOrder = 1000;
+//			backButton.SetPosition(25, height - 25);
+//			backButton.SetBackgroundImage(null, false);
+//			backButton.Action = () => NavigationView.PopView();
+//			backButton.AutoresizingMask = Autoresizing.Bottom | Autoresizing.Right;
+//			SubViews.Add(backButton);
+//			
+//            header = this.Children.Add(new DDSprite(null), 999);
+//			header.SetPosition(Size.Width / 2, Size.Height - 25);
+//			header.ScaleXY = new DDVector(Size.Width, 50) / header.Size;
+//			header.Color = new DDColor(0.94f, 0.94f, 0.94f);
 		}
 
 		protected void SetContent(DDView view)
@@ -68,8 +68,8 @@ public class DDNavigationView : DDView
 		public override void OnAfterResize()
 		{
 			base.OnAfterResize();
-			header.SetPosition(Size.Width / 2, Size.Height - 25);
-			header.ScaleXY = new DDVector(Size.Width, 50) / header.Size;
+//			header.SetPosition(Size.Width / 2, Size.Height - 25);
+//			header.ScaleXY = new DDVector(Size.Width, 50) / header.Size;
 		}
 
 		public virtual void OnPageAppear()
@@ -98,20 +98,19 @@ public class DDNavigationView : DDView
         else
         {
             _views.First()
-				.StartAction(aa => aa.MoveTo(0.2f, -Size.Width * 0.5f, Size.Height * 0.5f)
+				.StartAction(aa => aa.MoveTo(1.2f, -Size.Width * 0.5f, Size.Height * 0.5f)
 			                           + aa.Hide());
-            // TODO: Animation with resizing
+
             view.SetPosition(Size.Width * 1.5f, Size.Height * 0.5f);
 			view.StartAction(aa => aa.Delay(0.1f)
-			                 + aa.MoveTo(0.6f, Size.Width * 0.5f, Size.Height * 0.5f).EaseBounceOut());
-			view.StartAction(aa => aa.Delay(0.2f) + aa.Sound("DDNavigationView_Sound", false));
+			                 + aa.MoveTo(0.6f, Size.Width * 0.5f, Size.Height * 0.5f));
 			UserInteractionEnabled = false;
-			this.StartAction(aa=> aa.Delay(0.5f)+ aa.Exec(() => UserInteractionEnabled = true));
+			this.StartAction(aa=> aa.Delay(0.6f)+ aa.Exec(() => UserInteractionEnabled = true));
         }
         _views.Push(view);
         SubViews.Add(view);
 
-        view.backButton.Visible = (_views.Count > 1);
+//        view.backButton.Visible = (_views.Count > 1);
     }
 
     public void PopView()
@@ -127,7 +126,7 @@ public class DDNavigationView : DDView
             
 			var first = _views.First();
 			first.StartAction(aa => aa.Show() + aa.Delay(0.1f)
-			                  + aa.MoveTo(0.6f, Size.Width * 0.5f, Size.Height * 0.5f).EaseBounceOut());
+			                  + aa.MoveTo(0.6f, Size.Width * 0.5f, Size.Height * 0.5f));
 			first.StartAction(aa => aa.Delay(0.2f) + aa.Sound("DDNavigationView_Sound", false));
 			first.OnPageAppear();
         }

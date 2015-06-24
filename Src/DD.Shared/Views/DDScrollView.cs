@@ -96,8 +96,8 @@ public class DDScrollView : DDView
 
                 _contentView.Position = (newPosition + trimmedPosition) / 2;
 
-                if (startViewPosition.DistanceSquare(_contentView.Position) > 3 ||
-                    startTouchPosition.DistanceSquare(WorldToNodeTransform() * touch.Position) > 3)
+                if (startViewPosition.DistanceSquare(_contentView.Position) > 13 ||
+                    startTouchPosition.DistanceSquare(WorldToNodeTransform() * touch.Position) > 13)
 					cancelThrough = true;
                 lastTouchPosition = WorldToNodeTransform() * touch.Position;
 			}
@@ -108,7 +108,7 @@ public class DDScrollView : DDView
 			isScrollStarted = false;
 
 			float timeDiff = DDScheduler.Instance.TimeSinceStart - startTouchTime;
-			if (!cancelThrough && timeDiff < 0.2f)
+			if (!cancelThrough && timeDiff < 0.5f)
 			{
                 base.OnTouches(new DDTouch { Finger=touch.Finger, Phase=DDTouchPhase.Began, Position = touch.Position });
                 base.OnTouches(touch);

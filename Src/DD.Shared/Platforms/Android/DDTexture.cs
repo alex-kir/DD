@@ -104,7 +104,8 @@ public partial class DDTexture
         }
         catch (Exception ex)
         {
-            DDDebug.Log(ex.ToString());
+            DDDebug.Trace(name);
+            DDDebug.LogException(ex);
         }
     }
 

@@ -151,7 +151,7 @@ public struct DDColor
             DDMath.Lerp(c1.A, c2.A, t));
     }
 
-    internal DDColor Negative()
+    public DDColor Negative()
     {
         return new DDColor(1 - R, 1 - G, 1 - B);
     }

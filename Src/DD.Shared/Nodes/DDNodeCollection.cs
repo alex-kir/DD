@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 
-public class DDNodeCollection : IEnumerable<DDNode>
+public class DDNodeCollection : ICollection<DDNode>
 {
 	DDNode _owner;
 	private List<DDNode> _collection = null;
@@ -30,21 +30,25 @@ public class DDNodeCollection : IEnumerable<DDNode>
 
     public T Add<T>(T item) where T : DDNode
     {
-		if (item.Parent != null)
+        Add((DDNode)item);
+		return item;
+	}
+
+    public void Add(DDNode item)
+    {
+        if (item.Parent != null)
         {
             throw new ArgumentException("Child already has a parent", "child");
         }
-		
 
-		Collection.Add(item);
-		item.Parent = _owner;
-		Reorder (item);
 
-		if (_owner.IsRunning)
+        Collection.Add(item);
+        item.Parent = _owner;
+        Reorder (item);
+
+        if (_owner.IsRunning)
             item.OnEnter();
-
-		return item;
-	}
+    }
 
 	public void ChangeParent(DDNode item)
 	{
@@ -64,6 +68,30 @@ public class DDNodeCollection : IEnumerable<DDNode>
 		var pos = oldParent.NodeToWorldTransform() * item.Position;
 		item.Position = _owner.WorldToNodeTransform() * pos;
 	}
+
+
+    public void Clear()
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool Contains(DDNode item)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void CopyTo(DDNode[] array, int arrayIndex)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool IsReadOnly
+    {
+        get
+        {
+            throw new NotImplementedException();
+        }
+    }
 
 //	public void Clear ()
 //	{
