@@ -27,6 +27,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+[Obsolete]
 public class DDActionManager
 {
     private static DDActionManager _instance = new DDActionManager();
@@ -43,6 +44,7 @@ public class DDActionManager
         DDScheduler.Instance.Schedule(_timer);
     }
 
+    [Obsolete]
     private void Tick(DDTimerEventArgs e)
     {
         DebugActionCount = 0;
@@ -62,6 +64,7 @@ public class DDActionManager
         }
     }
 
+    [Obsolete]
     public void AddAction(DDAnimation action, DDNode target)
     {
         if (action == null)
@@ -82,6 +85,7 @@ public class DDActionManager
         });
     }
 
+    [Obsolete]
     public void RemoveAction(DDAnimation action, DDNode target)
     {
         if (action == null)
@@ -102,6 +106,7 @@ public class DDActionManager
         });
     }
 
+    [Obsolete]
     public void RemoveAllActionsForTarget(DDNode target)
     {
         if (target == null)
@@ -118,6 +123,7 @@ public class DDActionManager
         });
     }
 
+    [Obsolete]
     public int CountActionsForTarget(DDNode target)
     {
         if (target == null)

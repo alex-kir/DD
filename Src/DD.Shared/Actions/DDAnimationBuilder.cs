@@ -3,37 +3,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class DDActionBuilder
+public class DDAnimationBuilder
 {
+    public static DDAnimationBuilder _shared = new DDAnimationBuilder(null);
+    public static DDAnimationBuilder Shared{ get { return _shared; } }
+
     public DDNode Node { get; private set; }
 
-    public DDActionBuilder(DDNode node)
+    public DDAnimationBuilder(DDNode node)
     {
         Node = node;
     }
 
     public DDIntervalAnimation MoveTo(float duration, float x, float y)
     {
-        return new DDMoveTo(duration, x, y);
+        return MoveTo(duration, new DDVector(x, y));
     }
 
     public DDIntervalAnimation MoveTo(float duration, DDVector xy)
     {
-        return new DDMoveTo(duration, xy);
+        return new DDIntervalAnimation<DDVector>(duration, xy, it => it.Position, (it, val) => it.Position = val, DDVector.Lerp);
     }
 
 	public DDIntervalAnimation MoveTo(float duration, params DDVector [] points)
 	{
 		var ret = new DDIntervalAnimation.SequenceInterval();
 		foreach (var p in points)
-			ret.Add(new DDMoveTo (duration / points.Length, p));
+            ret.Add(MoveTo(duration / points.Length, p));
 		return ret;
 	}
 
-
     public DDIntervalAnimation WavedMoveTo(float duration, float count, float size, DDVector xy)
     {
-        return new DDIntervalAction<DDVector>(duration, xy, it => it.Position, (it, val) => { it.Position = val; },
+        return new DDIntervalAnimation<DDVector>(duration, xy, it => it.Position, (it, val) => { it.Position = val; },
             (v1, v2, t) =>
             {
                 var ox = v2 - v1;
@@ -43,32 +45,39 @@ public class DDActionBuilder
             });
     }
 
-    internal DDIntervalAnimation RotateTo(float duration, float to)
+    public DDIntervalAnimation RotateTo(float duration, float to)
     {
-        return new DDRotateTo(duration, to);
+        return new DDIntervalAnimation<float>(duration, to, it => it.Rotation, (it, val) => it.Rotation = val, DDMath.Lerp);
     }
 
     public DDIntervalAnimation ScaleTo(float duration, float x, float y)
     {
-        return new DDScaleTo(duration, x, y);
-    }
-    public DDIntervalAnimation ScaleTo(float duration, float xy)
-    {
-        return new DDScaleTo(duration, xy, xy);
-    }
-    public DDIntervalAnimation ScaleTo(float duration, DDVector xy)
-    {
-        return new DDScaleTo(duration, xy);
+        return  ScaleTo(duration, new DDVector(x, y));
     }
 
-	public DDIntervalAnimation ScaleToSizeInner(float duration, DDVector xy)
-	{
-		return new DDScaleTo(duration, DDMath.MinXOrY(xy / this.Node.Size));
-	}
+    public DDIntervalAnimation ScaleTo(float duration, float xy)
+    {
+        return ScaleTo(duration, new DDVector(xy, xy));
+    }
+
+    public DDIntervalAnimation ScaleTo(float duration, DDVector xy)
+    {
+        return new DDIntervalAnimation<DDVector>(duration, xy, it => it.ScaleXY, (it, val) => it.ScaleXY = val, DDVector.Lerp);
+    }
+
+    public DDIntervalAnimation ScaleToSizeInner(float duration, DDVector xy)
+    {
+        return ScaleTo(duration, DDMath.MinXOrY(xy / this.Node.Size));
+    }
 
     public DDIntervalAnimation ScaleToSizeInner(float duration, float x, float y)
     {
-        return new DDScaleTo(duration, DDMath.MinXOrY(new DDVector(x, y) / this.Node.Size));
+        return ScaleTo(duration, DDMath.MinXOrY(new DDVector(x, y) / this.Node.Size));
+    }
+
+    public DDIntervalAnimation SizeTo(float duration, DDVector xy)
+    {
+        return new DDIntervalAnimation<DDVector>(duration, xy, it => it.Size, (it, val) => it.Size = val, DDVector.Lerp);
     }
 
     public DDIntervalAnimation Delay(float duration)
@@ -135,12 +144,12 @@ public class DDActionBuilder
     }
     public DDIntervalAnimation ColorTo(float duration, DDColor color)
     {
-        return new DDIntervalAction<DDColor>(duration, color, it => it.Color, (it, val) => it.Color = val, DDColor.Lerp);
+        return new DDIntervalAnimation<DDColor>(duration, color, it => it.Color, (it, val) => it.Color = val, DDColor.Lerp);
     }
 
     public DDIntervalAnimation ColorBlackTo(float duration, DDColor color)
 	{
-		return new DDIntervalAction<DDColor>(duration, color, it => it.ColorBlack, (it, val) => it.ColorBlack = val, DDColor.Lerp);
+		return new DDIntervalAnimation<DDColor>(duration, color, it => it.ColorBlack, (it, val) => it.ColorBlack = val, DDColor.Lerp);
 	}
     // -----------------------------------
 
@@ -191,12 +200,12 @@ public class DDActionBuilder
 
 public static class DDActionBuilderExtentions
 {
-    public static DDAnimation StartAction<T>(this T self, Func<DDActionBuilder, DDAnimation> ab) where T : DDNode
-    {
-        var action = ab(new DDActionBuilder(self));
-        DDActionManager.Instance.AddAction(action, self);
-        return action;
-    }
+//    public static DDAnimation StartAction<T>(this T self, Func<DDActionBuilder, DDAnimation> ab) where T : DDNode
+//    {
+//        var action = ab(new DDActionBuilder(self));
+//        DDActionManager.Instance.AddAction(action, self);
+//        return action;
+//    }
 
     public static DDIntervalAnimation Ease(this DDIntervalAnimation action, Func<float,float> func)
 	{

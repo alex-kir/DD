@@ -52,12 +52,17 @@ public class DDTextureFrame
 	
 	public DDRenderer.Quad BuildQuad()
 	{
-		var quad = new DDRenderer.Quad();
+        return BuildQuad(this.Size);
+    }
 
-        quad.xy1 = Size * trimming.LeftBottom;
-        quad.xy2 = Size * trimming.LeftTop;
-        quad.xy3 = Size * trimming.RightTop;
-        quad.xy4 = Size * trimming.RightBottom;
+    public DDRenderer.Quad BuildQuad(DDVector size)
+    {
+        var quad = new DDRenderer.Quad();
+
+        quad.xy1 = size * trimming.LeftBottom;
+        quad.xy2 = size * trimming.LeftTop;
+        quad.xy3 = size * trimming.RightTop;
+        quad.xy4 = size * trimming.RightBottom;
 #if DD_PLATFORM_ANDROID
         quad.uv1 = uv.LeftTop;
         quad.uv2 = uv.LeftBottom;

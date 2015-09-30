@@ -75,6 +75,8 @@ public class DDScheduler
     private static DDScheduler _instance = new DDScheduler();
     public static DDScheduler Instance { get { return _instance; } }
 
+    private readonly HashSet<DDNode> _animatedNodes = new HashSet<DDNode>();
+
     private List<DDTimer> _timers = new List<DDTimer>();
 
     public float TimeScale { get; set; }
@@ -97,8 +99,14 @@ public class DDScheduler
         {
             timer.OnTick(dt);
         }
-    }
 
+        foreach (var node in _animatedNodes)
+        {
+            node.Animations.OnTick(dt);
+//            timer.OnTick(dt);
+        }
+    }
+    [Obsolete]
     public void Schedule(DDTimer timer)
     {
         if (timer == null)
@@ -115,7 +123,7 @@ public class DDScheduler
             }
         });
     }
-
+    [Obsolete]
     public DDTimer Schedule(int priority, float interval, Action<DDTimerEventArgs> action)
     {
         if (action == null)
@@ -127,7 +135,7 @@ public class DDScheduler
         Schedule(timer);
         return timer;
     }
-
+    [Obsolete]
     public void Unschedule(DDTimer timer)
     {
         if (timer == null)
@@ -144,8 +152,23 @@ public class DDScheduler
         });
     }
 
+    [Obsolete]
     public void UnscheduleAll()
     {
         DDDirector.Instance.PostMessage(() => { _timers.Clear(); });
+    }
+
+    public void RegisterForAnimations(DDNode node)
+    {
+        DDDirector.Instance.PostMessage(() => {
+            _animatedNodes.Add(node);
+        });
+    }
+
+    public void UnregisterForAnimations(DDNode node)
+    {
+        DDDirector.Instance.PostMessage(() => {
+            _animatedNodes.Remove(node);
+        });
     }
 }

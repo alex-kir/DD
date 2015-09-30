@@ -23,5 +23,37 @@ public static class DDUtils
         variable = self;
         return self;
     }
+
+    #if DD_PLATFORM_ANDROID
+
+    private static Android.Content.ISharedPreferences _reader;
+    private static Android.Content.ISharedPreferencesEditor _writer;
+
+    private static Android.Content.ISharedPreferences GetReader()
+    {
+        if (_reader == null)
+            _reader = DDDirector.Instance.Activity.GetSharedPreferences("DDUtils", Android.Content.FileCreationMode.Private);
+        return _reader;
+    }
+
+    private static Android.Content.ISharedPreferencesEditor GetWriter()
+    {
+        if (_writer == null)
+            _writer = GetReader().Edit();
+        return _writer;
+    }
+
+    public static string LoadString(string key, string defolt)
+    {
+        return GetReader().GetString(key, defolt);
+    }
+
+    public static void SaveString(string key, string value)
+    {
+        GetWriter().PutString(key, value);
+        GetWriter().Commit();
+    }
+
+    #endif
 }
 

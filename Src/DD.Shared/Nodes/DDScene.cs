@@ -41,6 +41,16 @@ public class DDScene : DDNode
 
     bool adjusted = false;
 
+    public DDNode Content
+    {
+        get{ return Children.FirstOrDefault(); }
+        set
+        {
+            Children.Clear();
+            Children.Add(value);
+        }
+    }
+
     public DDScene()
         : base()
     {
@@ -80,10 +90,12 @@ public class DDScene : DDNode
 
         correctScaleRotateAnchor();
 
-        this.RunAction(new DDUpdate(() =>
-        {
-            correctScaleRotateAnchor();
-        }));
+//        this.RunAction(new DDUpdate(() =>
+//        {
+//            correctScaleRotateAnchor();
+//        }));
+        var aa = DDAnimationBuilder.Shared;
+        this.Animations.Add(aa.Update(correctScaleRotateAnchor));
     }
 
     public void AdjustHeight(float height)
@@ -117,10 +129,17 @@ public class DDScene : DDNode
 
         correctScaleRotateAnchor();
 
-        this.RunAction(new DDUpdate(() =>
-        {
-            correctScaleRotateAnchor();
-        }));
+        var aa = DDAnimationBuilder.Shared;
+        this.Animations.Add(aa.Update(correctScaleRotateAnchor));
+    }
+
+    public void AdjustWithDPI()
+    {
+        float scale = (DDDirector.Instance.DPI / 132f);
+        float width = this.Size.Width / scale;
+        float height = this.Size.Height / scale;
+        this.SetSize(width, height);
+        this.Scale = scale;
     }
 
     public static List<DDNode> LoadCbbLevel(string levelName)

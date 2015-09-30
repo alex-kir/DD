@@ -61,7 +61,7 @@ public partial class DDDirector
         }
     }
 
-    public void OnDraw(DDRenderer renderer)
+    internal void OnDraw(DDRenderer renderer)
     {
         using (var stop = DDDebug.Measure("OnDraw"))
         {
@@ -109,7 +109,7 @@ public partial class DDDirector
         }
     }
 
-    public void ProcessMessages()
+    internal void ProcessMessages()
     {
         List<Action> messageLoopCopy = null;
         lock (_messageLoop)
@@ -133,15 +133,15 @@ public partial class DDDirector
     {
         if (Scene != null)
         {
-            Scene.OnExit();
+            Scene.IsRunning = false;
 			Scene.Dispose();
         }
         StopAllAudioEffects();
         Scene = scene;
-        Scene.OnEnter();
+        Scene.IsRunning = true;
     }
 
-    internal void ReplaceScene(DDScene scene, bool purgeUnusedTextures = true)
+    public void ReplaceScene(DDScene scene, bool purgeUnusedTextures = true)
     {
         PostMessage(delegate
         {

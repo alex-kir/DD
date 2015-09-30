@@ -27,7 +27,7 @@ namespace Demo.Xamarin.Android
             base.OnCreate(bundle);
 
             DDDirector.Instance.OnCreate(this, bundle, ScreenOrientation.Portrait, 30,
-                new DDRenderer(), () => new Demo.Shared.MyScene());
+                new DDRenderer(), () => new Demo.Shared.MyScene2());
         }
 
         protected override void OnPause()

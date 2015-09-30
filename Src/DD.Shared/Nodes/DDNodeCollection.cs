@@ -46,11 +46,17 @@ public class DDNodeCollection : ICollection<DDNode>
         item.Parent = _owner;
         Reorder (item);
 
-        if (_owner.IsRunning)
-            item.OnEnter();
+        item.IsRunning = _owner.IsRunning;
     }
 
-	public void ChangeParent(DDNode item)
+    public void AddRange(IEnumerable<DDNode> items)
+    {
+        foreach (var item in items) {
+            Add(item);
+        }
+    }
+	
+    public void ChangeParent(DDNode item)
 	{
 		if (item.Parent == null)
 		{
@@ -67,12 +73,15 @@ public class DDNodeCollection : ICollection<DDNode>
 
 		var pos = oldParent.NodeToWorldTransform() * item.Position;
 		item.Position = _owner.WorldToNodeTransform() * pos;
+        item.IsRunning = _owner.IsRunning;
 	}
-
 
     public void Clear()
     {
-        throw new NotImplementedException();
+        var tmp = Collection.ToList();
+        Collection.Clear();
+        foreach (var item in tmp)
+            item.IsRunning = false;
     }
 
     public bool Contains(DDNode item)
@@ -110,8 +119,7 @@ public class DDNodeCollection : ICollection<DDNode>
 //
 	public bool Remove (DDNode item)
 	{
-		if (_owner.IsRunning)
-			item.OnExit();
+        item.IsRunning = false;
 		return Collection.Remove(item);
 	}
 //

@@ -56,6 +56,7 @@ public class DDActivityIndicatorView : DDView
 			index++;
 		};
 		animation();
-        this.StartAction(aa => aa.Repeat(aa.Exec(animation) + aa.Delay(0.1f)));
+        var aa = this.Animations.Builder;
+        this.Animations.Add(aa.Repeat(aa.Exec(animation) + aa.Delay(0.1f)));
     }
 }

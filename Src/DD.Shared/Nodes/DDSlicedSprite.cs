@@ -39,6 +39,16 @@ public class DDSlicedSprite : DDNode
 	DDSprite _rightMiddle;
 	DDSprite _rightTop;
 
+    public DDSlicedSprite(DDVector size)
+        : this(DDTextureManager.Instance.NullTextureFrame, size.Width, size.Height)
+    {
+    }
+
+    public DDSlicedSprite(float width, float height)
+        : this(DDTextureManager.Instance.NullTextureFrame, width, height)
+    {
+    }
+
     public DDSlicedSprite(string texName, DDVector size)
         : this(texName, size.Width, size.Height)
     { }

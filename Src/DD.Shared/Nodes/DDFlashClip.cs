@@ -452,7 +452,7 @@ public class DDFlashClip : DDNode
                 layer.RootNode.Visible = true;
                 foreach (var nodeAction in layer.AllNodesActions)
                 {
-                    DDActionManager.Instance.RemoveAction(nodeAction.Value, nodeAction.Key);
+//                    DDActionManager.Instance.RemoveAction(nodeAction.Value, nodeAction.Key);
                     DDAnimation.Start(nodeAction.Value, nodeAction.Key);
                 }
             }
@@ -498,7 +498,7 @@ public class DDFlashClip : DDNode
                     layer.RootNode.Visible = false;
                     foreach (var nodeAction in layer.AllNodesActions)
                     {
-                        DDActionManager.Instance.RemoveAction(nodeAction.Value, nodeAction.Key);
+//                        DDActionManager.Instance.RemoveAction(nodeAction.Value, nodeAction.Key);
                     }
                 }
             }

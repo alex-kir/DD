@@ -9,7 +9,6 @@
     <Import_RootNamespace>Demo.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)MyScene.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)HomePage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MyScene2.cs" />
   </ItemGroup>
 </Project>

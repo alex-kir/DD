@@ -67,15 +67,28 @@ public class DDSprite : DDNode
 		Size = _frame.Size;
 		quad = _frame.BuildQuad();
 	}
+
+    public override DDVector Size
+    {
+        get
+        {
+            return base.Size;
+        }
+        set
+        {
+            if (base.Size != value) {
+                base.Size = value;
+                if (_frame != null)
+                    quad = _frame.BuildQuad(value);
+            }
+        }
+    }
 	
     public override void Draw(DDRenderer renderer)
     {
 		quad.Matrix = this.NodeToWorldTransform();
-		
 		quad.white_color1 = quad.white_color2 = quad.white_color3 = quad.white_color4 = this.CombinedColor;
-
 		quad.black_color1 = quad.black_color2 = quad.black_color3 = quad.black_color4 = this.CombinedColorBlack;
-
 		renderer.DrawQuad(_frame.Texture, quad);
     }
 

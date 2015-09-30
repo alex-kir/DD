@@ -39,33 +39,31 @@ public partial class DDNode : IDisposable
     private bool _isNodeToParentMatrixDirty;
 
     private DDVector _position;
-    public DDVector Position
+    public virtual DDVector Position
     {
         get { return _position; }
         set
         {
             if (_position != value)
             {
-                SetPosition(value);
+                _position = value;
+                _isNodeToParentMatrixDirty = true;
             }
         }
     }
 
     public void SetPosition(float x, float y)
     {
-        _position.X = x;
-        _position.Y = y;
-        _isNodeToParentMatrixDirty = true;
+        Position = new DDVector(x, y);
     }
 
     public void SetPosition(DDVector point)
     {
-        _position = point;
-        _isNodeToParentMatrixDirty = true;
+        Position = point;
     }
 
     private DDVector _rotation;
-    public DDVector RotationXY
+    public virtual DDVector RotationXY
     {
         get { return _rotation; }
         set
@@ -78,7 +76,7 @@ public partial class DDNode : IDisposable
         }
     }
 
-    public virtual float Rotation
+    public float Rotation
     {
         get { return (_rotation.X + _rotation.Y) / 2; }
         set { RotationXY = new DDVector(value, value); }
@@ -101,7 +99,7 @@ public partial class DDNode : IDisposable
 
 
     private DDVector _scale;
-    public DDVector ScaleXY
+    public virtual DDVector ScaleXY
     {
         get { return _scale; }
         set
@@ -176,7 +174,7 @@ public partial class DDNode : IDisposable
 
 
     private DDVector _anchorPoint;
-    public DDVector AnchorPoint
+    public virtual DDVector AnchorPoint
     {
         get { return _anchorPoint; }
         set
@@ -201,7 +199,7 @@ public partial class DDNode : IDisposable
 
     private DDVector _size;
 
-    public DDVector Size
+    public virtual DDVector Size
     {
         get { return _size; }
         set
@@ -591,7 +589,40 @@ public partial class DDNode : IDisposable
 
     #endregion Hierarchy
 
-    public bool IsRunning { get; protected set; }
+    private bool _isRunning = false;
+
+    public bool IsRunning
+    {
+        get{ return _isRunning; }
+        internal set
+        {
+            if (_isRunning != value)
+            {
+                _isRunning = value;
+                OnIsRunningChanged();
+            }
+        }
+    }
+
+    protected void OnIsRunningChanged()
+    {
+        foreach (DDNode child in _children)
+        {
+            child.IsRunning = _isRunning;
+        }
+
+        if (IsRunning)
+        {
+            if (_animations != null)
+                _animations.Register();
+        }
+        else
+        {
+            if (_animations != null)
+                _animations.Unregister();
+        }
+    }
+
     public bool Visible { get; set; }
     public bool VisibleCombined { get { return Visible && (Parent == null ? true : Parent.VisibleCombined); } }
 
@@ -658,23 +689,23 @@ public partial class DDNode : IDisposable
 //		Dispose();
 //    }
 
-    public virtual void OnEnter()
-    {
-        foreach (DDNode child in _children)
-        {
-            child.OnEnter();
-        }
-        IsRunning = true;
-    }
-
-    public virtual void OnExit()
-    {
-        IsRunning = false;
-        foreach (DDNode child in _children)
-        {
-            child.OnExit();
-        }
-    }
+//    public virtual void OnEnter()
+//    {
+//        foreach (DDNode child in _children)
+//        {
+//            child.OnEnter();
+//        }
+//        IsRunning = true;
+//    }
+//
+//    public virtual void OnExit()
+//    {
+//        IsRunning = false;
+//        foreach (DDNode child in _children)
+//        {
+//            child.OnExit();
+//        }
+//    }
 	
 	public static DDTexture _GetUsedTexture(DDNode node)
 	{
@@ -743,6 +774,29 @@ public partial class DDNode : IDisposable
 
     #region Actions
 
+    DDNodeAnimations _animations = null;
+
+    public DDNodeAnimations Animations
+    {
+        get
+        {
+            if (_animations == null)
+            {
+                _animations = new DDNodeAnimations(this);
+                if (IsRunning)
+                    _animations.Register();
+            }
+            return _animations;
+        }
+//        private set {
+//            if (_animations != null)
+//                _animations.Unregister();
+//            _animations = value;
+//            _animations.
+//        }
+    }
+
+    [Obsolete]
     public virtual DDAnimation RunAction(DDAnimation action)
     {
         if (action == null)
@@ -754,12 +808,12 @@ public partial class DDNode : IDisposable
 
         return action;
     }
-
+    [Obsolete]
     public void StopAllActions()
     {
         DDActionManager.Instance.RemoveAllActionsForTarget(this);
     }
-
+    [Obsolete]
     internal void StopAllActions(bool recoursive)
     {
         StopAllActions();
@@ -767,7 +821,7 @@ public partial class DDNode : IDisposable
             foreach (var child in Children)
                 child.StopAllActions(recoursive);
     }
-
+    [Obsolete]
     public void StopAction(DDAnimation action)
     {
         DDActionManager.Instance.RemoveAction(action, this);

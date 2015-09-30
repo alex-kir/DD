@@ -50,15 +50,18 @@ public class DDButtonView : DDTextView
 	        if (Action != null)
 	            DDDirector.Instance.PostMessage(Action);
 			DDAudio.Instance.PlayEffect("DDButton_Sound");
+
 			if (BackgroundSprite.Visible)
 			{
 		        var color = BackgroundColor;
 		        BackgroundColor = SelectedColor;
-		        BackgroundSprite.StartAction(aa => aa.ColorTo(0.1f, color));
+                var aa = BackgroundSprite.Animations.Builder;
+                BackgroundSprite.Animations.Add(aa.ColorTo(0.1f, color));
 			}
 			else if (background != null)
 			{
-				background.StartAction(aa => aa.ColorTo(0.1f, DDColor.Gray) + aa.ColorTo(0.1f, DDColor.White));
+                var aa = background.Animations.Builder;
+                background.Animations.Add(aa.ColorTo(0.1f, DDColor.Gray) + aa.ColorTo(0.1f, DDColor.White));
 			}
 		}
     }

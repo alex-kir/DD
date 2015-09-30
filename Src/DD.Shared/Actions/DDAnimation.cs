@@ -52,7 +52,8 @@ public class DDAnimation
     protected virtual void Start(DDNode target) { }
     protected virtual void Step(DDNode target, float t) { }
 #endif
-
+    internal string Name;
+//    internal bool IsStarted { get; private set; }
     public virtual bool IsDone { get { return true; } }
 
     public class Sequence : DDAnimation
@@ -466,183 +467,183 @@ public class DDReverseTime : DDIntervalAnimation
     }
 }
 
-public class DDMoveTo : DDIntervalAnimation
-{
-    protected DDVector _endPosition;
-    protected DDVector _startPosition;
-    protected DDVector _delta;
+//public class DDMoveTo : DDIntervalAnimation
+//{
+//    protected DDVector _endPosition;
+//    protected DDVector _startPosition;
+//    protected DDVector _delta;
+//
+//    public DDMoveTo(float duration, DDVector position)
+//        : base(duration)
+//    {
+//        _endPosition = position;
+//    }
+//
+//    public DDMoveTo(float duration, float x, float y)
+//        : this(duration, new DDVector(x, y))
+//    { }
+//
+//    protected override void Start(DDNode target)
+//    {
+//        base.Start(target);
+//        _startPosition = target.Position;
+//        _delta = new DDVector(_endPosition.X - _startPosition.X, _endPosition.Y - _startPosition.Y);
+//    }
+//
+//    protected override void Update(DDNode target, float t)
+//    {
+//        DDVector pos = target.Position;
+//        pos.X = _startPosition.X + (_delta.X * t);
+//        pos.Y = _startPosition.Y + (_delta.Y * t);
+//        target.Position = pos;
+//    }
+//}
 
-    public DDMoveTo(float duration, DDVector position)
-        : base(duration)
-    {
-        _endPosition = position;
-    }
+//public class DDMoveBy : DDMoveTo
+//{
+//    public DDMoveBy(float duration, DDVector moveByAmount)
+//        : base(duration, DDVector.Empty)
+//    {
+//        _delta = moveByAmount;
+//    }
+//
+//    public DDMoveBy(float duration, float x, float y)
+//        : this(duration, new DDVector(x, y))
+//    { }
+//
+//    protected override void Start(DDNode target)
+//    {
+//        DDVector tmp = _delta;
+//        base.Start(target);
+//        _delta = tmp;
+//    }
+//}
 
-    public DDMoveTo(float duration, float x, float y)
-        : this(duration, new DDVector(x, y))
-    { }
+//public class DDRotateTo : DDIntervalAnimation
+//{
+//    private DDVector _startRotation;
+//    private DDVector _rotation;
+//
+//    public DDRotateTo(float duration, float rotation)
+//        : base(duration)
+//    {
+//        _rotation = new DDVector(rotation, rotation);
+//    }
+//
+//    public DDRotateTo(float duration, float rotationX, float rotationY)
+//        : base(duration)
+//    {
+//        _rotation = new DDVector(rotationX, rotationY);
+//    }
+//
+//    public DDRotateTo(float duration, DDVector rotation)
+//        : base(duration)
+//    {
+//        _rotation = rotation;
+//    }
+//
+//    protected override void Start(DDNode target)
+//    {
+//        base.Start(target);
+//        _startRotation = target.RotationXY;
+//    }
+//
+//    protected override void Update(DDNode target, float t)
+//    {
+//        target.RotationXY = _startRotation + ((_rotation - _startRotation) * t);
+//    }
+//}
+//
+//public class DDRotateBy : DDIntervalAnimation
+//{
+//    private float _angle;
+//    private float _startAngle;
+//
+//    public DDRotateBy(float duration, float angle)
+//        : base(duration)
+//    {
+//        _angle = angle;
+//    }
+//
+//    protected override void Start(DDNode target)
+//    {
+//        base.Start(target);
+//        _startAngle = target.Rotation;
+//    }
+//
+//    protected override void Update(DDNode target, float t)
+//    {
+//        target.Rotation = _startAngle + (_angle * t);
+//    }
+//}
 
-    protected override void Start(DDNode target)
-    {
-        base.Start(target);
-        _startPosition = target.Position;
-        _delta = new DDVector(_endPosition.X - _startPosition.X, _endPosition.Y - _startPosition.Y);
-    }
-
-    protected override void Update(DDNode target, float t)
-    {
-        DDVector pos = target.Position;
-        pos.X = _startPosition.X + (_delta.X * t);
-        pos.Y = _startPosition.Y + (_delta.Y * t);
-        target.Position = pos;
-    }
-}
-
-public class DDMoveBy : DDMoveTo
-{
-    public DDMoveBy(float duration, DDVector moveByAmount)
-        : base(duration, DDVector.Empty)
-    {
-        _delta = moveByAmount;
-    }
-
-    public DDMoveBy(float duration, float x, float y)
-        : this(duration, new DDVector(x, y))
-    { }
-
-    protected override void Start(DDNode target)
-    {
-        DDVector tmp = _delta;
-        base.Start(target);
-        _delta = tmp;
-    }
-}
-
-public class DDRotateTo : DDIntervalAnimation
-{
-    private DDVector _startRotation;
-    private DDVector _rotation;
-
-    public DDRotateTo(float duration, float rotation)
-        : base(duration)
-    {
-        _rotation = new DDVector(rotation, rotation);
-    }
-
-    public DDRotateTo(float duration, float rotationX, float rotationY)
-        : base(duration)
-    {
-        _rotation = new DDVector(rotationX, rotationY);
-    }
-
-    public DDRotateTo(float duration, DDVector rotation)
-        : base(duration)
-    {
-        _rotation = rotation;
-    }
-
-    protected override void Start(DDNode target)
-    {
-        base.Start(target);
-        _startRotation = target.RotationXY;
-    }
-
-    protected override void Update(DDNode target, float t)
-    {
-        target.RotationXY = _startRotation + ((_rotation - _startRotation) * t);
-    }
-}
-
-public class DDRotateBy : DDIntervalAnimation
-{
-    private float _angle;
-    private float _startAngle;
-
-    public DDRotateBy(float duration, float angle)
-        : base(duration)
-    {
-        _angle = angle;
-    }
-
-    protected override void Start(DDNode target)
-    {
-        base.Start(target);
-        _startAngle = target.Rotation;
-    }
-
-    protected override void Update(DDNode target, float t)
-    {
-        target.Rotation = _startAngle + (_angle * t);
-    }
-}
-
-public class DDScaleTo : DDIntervalAnimation
-{
-    protected float _startScaleX;
-    protected float _startScaleY;
-    protected float _endScaleX;
-    protected float _endScaleY;
-    protected float _deltaX;
-    protected float _deltaY;
-
-    public DDScaleTo(float duration, float scale)
-        : base(duration)
-    {
-        _endScaleX = _endScaleY = scale;
-    }
-
-    public DDScaleTo(float duration, float scaleX, float scaleY)
-        : base(duration)
-    {
-        _endScaleX = scaleX;
-        _endScaleY = scaleY;
-    }
-
-    public DDScaleTo(float duration, DDVector scale)
-        : base(duration)
-    {
-        _endScaleX = scale.X;
-        _endScaleY = scale.Y;
-    }
-
-    protected override void Start(DDNode target)
-    {
-        base.Start(target);
-
-        _startScaleX = target.ScaleX;
-        _startScaleY = target.ScaleY;
-
-        _deltaX = _endScaleX - _startScaleX;
-        _deltaY = _endScaleY - _startScaleY;
-    }
-
-    protected override void Update(DDNode target, float t)
-    {
-        target.ScaleX = _startScaleX + (_deltaX * t);
-        target.ScaleY = _startScaleY + (_deltaY * t);
-    }
-}
-
-public class DDScaleBy : DDScaleTo
-{
-    public DDScaleBy(float duration, float scale)
-        : this(duration, scale, scale)
-    {
-    }
-
-    public DDScaleBy(float duration, float scaleX, float scaleY)
-        : base(duration, scaleX, scaleY)
-    {
-    }
-
-    protected override void Start(DDNode target)
-    {
-        base.Start(target);
-
-        _deltaX = _startScaleX * _endScaleX - _startScaleX;
-        _deltaY = _startScaleY * _endScaleY - _startScaleY;
-    }
-}
+//public class DDScaleTo : DDIntervalAnimation
+//{
+//    protected float _startScaleX;
+//    protected float _startScaleY;
+//    protected float _endScaleX;
+//    protected float _endScaleY;
+//    protected float _deltaX;
+//    protected float _deltaY;
+//
+//    public DDScaleTo(float duration, float scale)
+//        : base(duration)
+//    {
+//        _endScaleX = _endScaleY = scale;
+//    }
+//
+//    public DDScaleTo(float duration, float scaleX, float scaleY)
+//        : base(duration)
+//    {
+//        _endScaleX = scaleX;
+//        _endScaleY = scaleY;
+//    }
+//
+//    public DDScaleTo(float duration, DDVector scale)
+//        : base(duration)
+//    {
+//        _endScaleX = scale.X;
+//        _endScaleY = scale.Y;
+//    }
+//
+//    protected override void Start(DDNode target)
+//    {
+//        base.Start(target);
+//
+//        _startScaleX = target.ScaleX;
+//        _startScaleY = target.ScaleY;
+//
+//        _deltaX = _endScaleX - _startScaleX;
+//        _deltaY = _endScaleY - _startScaleY;
+//    }
+//
+//    protected override void Update(DDNode target, float t)
+//    {
+//        target.ScaleX = _startScaleX + (_deltaX * t);
+//        target.ScaleY = _startScaleY + (_deltaY * t);
+//    }
+//}
+//
+//public class DDScaleBy : DDScaleTo
+//{
+//    public DDScaleBy(float duration, float scale)
+//        : this(duration, scale, scale)
+//    {
+//    }
+//
+//    public DDScaleBy(float duration, float scaleX, float scaleY)
+//        : base(duration, scaleX, scaleY)
+//    {
+//    }
+//
+//    protected override void Start(DDNode target)
+//    {
+//        base.Start(target);
+//
+//        _deltaX = _startScaleX * _endScaleX - _startScaleX;
+//        _deltaY = _startScaleY * _endScaleY - _startScaleY;
+//    }
+//}
 
 public class DDJumpBy : DDIntervalAnimation
 {

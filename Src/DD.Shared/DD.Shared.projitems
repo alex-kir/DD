@@ -16,7 +16,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)DDDisposable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DDFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DDFont.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DDJson.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DDLinq.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DDMath.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DDMatrix.cs" />
@@ -30,10 +29,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)DDTouchDispatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DDVector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DDXml.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Actions\DDActionBuilder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Actions\DDActionManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Actions\DDAnimation.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Actions\DDAnimations.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Actions\DDPlayClip.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Actions\DDPlayEffect.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Actions\Ease\DDActionEase.cs" />
@@ -86,19 +83,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Platforms\Win32\DDFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Platforms\Win32\DDRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Platforms\Win32\DDTexture.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Views\DDActivityIndicatorView.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Views\DDButtonView.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Views\DDImageView.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Views\DDKeyboardView.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Views\DDNavigationView.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Views\DDScrollView.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Views\DDTextInputView.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Views\DDTextView.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Views\DDVerticalFlowView.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Views\DDView.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Views\DDViewCollection.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Views\DDWindow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DDUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\DDAnimationBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\DDIntervalAnimation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\DDAnimations.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)DDShader.shader" />
@@ -111,6 +99,5 @@
     <Folder Include="$(MSBuildThisFileDirectory)Actions\Ease\" />
     <Folder Include="$(MSBuildThisFileDirectory)Nodes\" />
     <Folder Include="$(MSBuildThisFileDirectory)Platforms\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Views\" />
   </ItemGroup>
 </Project>
