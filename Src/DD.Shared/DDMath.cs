@@ -122,55 +122,56 @@ public class DDMath
         return Nurbs(t, res);
     }
 
-    internal static float Max(float a, float b)
+    public static float Max(float a, float b)
     {
         return a > b ? a : b;
     }
 
-    internal static int Max(int a, int b)
+    public static int Max(int a, int b)
     {
         return a > b ? a : b;
     }
 
-    internal static float Min(float a, float b)
+    public static float Min(float a, float b)
     {
         return a < b ? a : b;
     }
 
-    internal static int Min(int a, int b)
+    public static int Min(int a, int b)
     {
         return a < b ? a : b;
     }
 
-    internal static float MaxXOrY(DDVector v)
+    public static float MaxXOrY(DDVector v)
     {
         return v.X > v.Y ? v.X : v.Y;
     }
 
-    internal static float MinXOrY(DDVector v)
+    public static float MinXOrY(DDVector v)
     {
         return v.X < v.Y ? v.X : v.Y;
     }
 	
-    internal static int RoundToInt(float f)
+    public static int RoundToInt(float f)
     {
         return (int)Math.Round(f, 0, MidpointRounding.AwayFromZero);
     }
 
-    internal static float RadianToDegrees(float radians)
+    public static float RadianToDegrees(float radians)
     {
         return radians / PI * 180;
     }
 
-    internal static float Sqrt(float p)
+    public static float Sqrt(float p)
     {
         return (float)Math.Sqrt(p);
     }
 
-    internal static float Atan(float p)
+    public static float Atan(float p)
     {
         return (float)Math.Atan(p);
     }
+
     public static float Angle(DDVector v1, DDVector v2)
     {
         var vv1 = v1 / v1.Length;
@@ -178,7 +179,7 @@ public class DDMath
         return RadianToDegrees((float)(Math.Atan2(vv2.Y, vv2.X) - Math.Atan2(vv1.Y, vv1.X)));
     }
 
-    internal static float Abs(float p)
+    public static float Abs(float p)
     {
         return p < 0 ? -p : p;
     }

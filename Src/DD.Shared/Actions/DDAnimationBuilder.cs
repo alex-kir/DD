@@ -14,24 +14,24 @@ public class DDAnimationBuilder
     {
         Node = node;
     }
-
-    public DDIntervalAnimation MoveTo(float duration, float x, float y)
-    {
-        return MoveTo(duration, new DDVector(x, y));
-    }
-
-    public DDIntervalAnimation MoveTo(float duration, DDVector xy)
-    {
-        return new DDIntervalAnimation<DDVector>(duration, xy, it => it.Position, (it, val) => it.Position = val, DDVector.Lerp);
-    }
-
-	public DDIntervalAnimation MoveTo(float duration, params DDVector [] points)
-	{
-		var ret = new DDIntervalAnimation.SequenceInterval();
-		foreach (var p in points)
-            ret.Add(MoveTo(duration / points.Length, p));
-		return ret;
-	}
+//
+//    public DDIntervalAnimation MoveTo(float duration, float x, float y)
+//    {
+//        return MoveTo(duration, new DDVector(x, y));
+//    }
+//
+//    public DDIntervalAnimation MoveTo(float duration, DDVector xy)
+//    {
+//        return new DDIntervalAnimation<DDVector>(duration, xy, it => it.Position, (it, val) => it.Position = val, DDVector.Lerp);
+//    }
+//
+//	public DDIntervalAnimation MoveTo(float duration, params DDVector [] points)
+//	{
+//		var ret = new DDIntervalAnimation.SequenceInterval();
+//		foreach (var p in points)
+//            ret.Add(MoveTo(duration / points.Length, p));
+//		return ret;
+//	}
 
     public DDIntervalAnimation WavedMoveTo(float duration, float count, float size, DDVector xy)
     {
@@ -50,67 +50,67 @@ public class DDAnimationBuilder
         return new DDIntervalAnimation<float>(duration, to, it => it.Rotation, (it, val) => it.Rotation = val, DDMath.Lerp);
     }
 
-    public DDIntervalAnimation ScaleTo(float duration, float x, float y)
-    {
-        return  ScaleTo(duration, new DDVector(x, y));
-    }
+//    public DDIntervalAnimation ScaleTo(float duration, float x, float y)
+//    {
+//        return  ScaleTo(duration, new DDVector(x, y));
+//    }
+//
+//    public DDIntervalAnimation ScaleTo(float duration, float xy)
+//    {
+//        return ScaleTo(duration, new DDVector(xy, xy));
+//    }
+//
+//    public DDIntervalAnimation ScaleTo(float duration, DDVector xy)
+//    {
+//        return new DDIntervalAnimation<DDVector>(duration, xy, it => it.ScaleXY, (it, val) => it.ScaleXY = val, DDVector.Lerp);
+//    }
 
-    public DDIntervalAnimation ScaleTo(float duration, float xy)
-    {
-        return ScaleTo(duration, new DDVector(xy, xy));
-    }
-
-    public DDIntervalAnimation ScaleTo(float duration, DDVector xy)
-    {
-        return new DDIntervalAnimation<DDVector>(duration, xy, it => it.ScaleXY, (it, val) => it.ScaleXY = val, DDVector.Lerp);
-    }
-
-    public DDIntervalAnimation ScaleToSizeInner(float duration, DDVector xy)
-    {
-        return ScaleTo(duration, DDMath.MinXOrY(xy / this.Node.Size));
-    }
-
-    public DDIntervalAnimation ScaleToSizeInner(float duration, float x, float y)
-    {
-        return ScaleTo(duration, DDMath.MinXOrY(new DDVector(x, y) / this.Node.Size));
-    }
+//    public DDIntervalAnimation ScaleToSizeInner(float duration, DDVector xy)
+//    {
+//        return ScaleTo(duration, DDMath.MinXOrY(xy / this.Node.Size));
+//    }
+//
+//    public DDIntervalAnimation ScaleToSizeInner(float duration, float x, float y)
+//    {
+//        return ScaleTo(duration, DDMath.MinXOrY(new DDVector(x, y) / this.Node.Size));
+//    }
 
     public DDIntervalAnimation SizeTo(float duration, DDVector xy)
     {
         return new DDIntervalAnimation<DDVector>(duration, xy, it => it.Size, (it, val) => it.Size = val, DDVector.Lerp);
     }
 
-    public DDIntervalAnimation Delay(float duration)
-    {
-        return new DDDelayTime(duration);
-    }
+//    public DDIntervalAnimation Delay(float duration)
+//    {
+//        return new DDDelayTime(duration);
+//    }
 
-    public DDIntervalAnimation Exec(System.Action act)
-    {
-        Action safeAction = () =>
-        {
-            try
-            {
-                act();
-            }
-            catch (Exception ex)
-            {
-                DDDebug.Log(ex);
-            }
-            ;
-        };
-        return new DDInstantAction(act == null ? null : safeAction);
-    }
+//    public DDIntervalAnimation Exec(System.Action act)
+//    {
+//        Action safeAction = () =>
+//        {
+//            try
+//            {
+//                act();
+//            }
+//            catch (Exception ex)
+//            {
+//                DDDebug.Log(ex);
+//            }
+//            ;
+//        };
+//        return new DDInstantAction(act == null ? null : safeAction);
+//    }
 
     public DDIntervalAnimation Sound(string name, bool wait)
     {
         return new DDPlayEffect(name, wait);
     }
-
-    public DDIntervalAnimation Kill()
-    {
-        return Exec(() => { Node.RemoveFromParent(); });
-    }
+//
+//    public DDIntervalAnimation Kill()
+//    {
+//        return Exec(() => { Node.RemoveFromParent(); });
+//    }
 
     public DDIntervalAnimation FlashClip()
     {

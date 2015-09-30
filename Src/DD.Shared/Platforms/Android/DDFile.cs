@@ -42,25 +42,25 @@ public partial class DDFile
 {
     static string []_assersList = null;
 
-    public static byte[] GetBytes(string name)
-    {
-        byte[] bytes = null;
-        if (_assersList == null)
-            _assersList = DDDirector.Instance.Activity.Assets.List("");
-
-        if (!_assersList.Contains(name))
-            name = _assersList.FirstOrDefault(it => it.StartsWith(name + ".", StringComparison.InvariantCultureIgnoreCase));
-        if (name != null)
-        {
-            using (var stream = DDDirector.Instance.Activity.Assets.Open(name))
-            {
-                var ms = new MemoryStream();
-                stream.CopyTo(ms);
-                bytes = ms.ToArray();
-            }
-        }
-        return bytes;
-    }
+//    public static byte[] GetBytes(string name)
+//    {
+//        byte[] bytes = null;
+//        if (_assersList == null)
+//            _assersList = DDDirector.Instance.Activity.Assets.List("");
+//
+//        if (!_assersList.Contains(name))
+//            name = _assersList.FirstOrDefault(it => it.StartsWith(name + ".", StringComparison.InvariantCultureIgnoreCase));
+//        if (name != null)
+//        {
+//            using (var stream = DDDirector.Instance.Activity.Assets.Open(name))
+//            {
+//                var ms = new MemoryStream();
+//                stream.CopyTo(ms);
+//                bytes = ms.ToArray();
+//            }
+//        }
+//        return bytes;
+//    }
 
     internal static string FindFile(string name)
     {
@@ -70,6 +70,17 @@ public partial class DDFile
                         where f.StartsWith(n + ".")
                         select f;
         return filenames.FirstOrDefault();
+    }
+
+    public static string GetString(string name)
+    {
+        var bytes = GetBytes(name);
+        return Encoding.UTF8.GetString(bytes);
+    }
+
+    public static void PutString(string name, string value)
+    {
+        
     }
 }
 

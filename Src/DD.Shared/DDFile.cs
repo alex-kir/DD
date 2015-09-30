@@ -35,9 +35,74 @@ using System.IO;
 //using Android.Runtime;
 //using Android.Views;
 //using Android.Widget;
+using System.Reflection;
 
 public partial class DDFile
 {
+//    private static string[] _resourcesNames;
+
+    private static readonly Dictionary<Assembly, string []> _resourcesNames = new Dictionary<Assembly, string[]>();
+
+    public static void LoadResourcesNames(Assembly assembly)
+    {
+        var names = assembly.GetManifestResourceNames();
+        _resourcesNames[assembly] = names;
+    }
+
+//    static DDFile()
+//    {
+//        var assembly = Assembly.GetCallingAssembly();
+//
+////        var assembly = typeof(DDFile).GetTypeInfo().Assembly;
+//        DDDebug.Trace(assembly);
+//
+//        DDDebug.Trace(Assembly.GetCallingAssembly());
+//        DDDebug.Trace(Assembly.GetEntryAssembly());
+//        DDDebug.Trace(Assembly.GetExecutingAssembly());
+//
+//        _resourcesNames = assembly.GetManifestResourceNames();
+//        DDDebug.Trace(_resourcesNames.DDJoinToString(", "));
+//    }
+
+    private static Tuple<Assembly, string> CompleteName(string resourceName)
+    {
+        foreach (var kv in _resourcesNames) {
+            var names = kv.Value;
+
+            var name = names.FirstOrDefault(it => it == resourceName);
+            if (name == null)
+                name = names.FirstOrDefault(it => it.EndsWith(resourceName));
+            if (name == null)
+                name = names.FirstOrDefault(it => it.Contains("." + resourceName + "."));
+            if (name != null)
+                return Tuple.Create(kv.Key, name);
+        }
+        return null;
+    }
+
+    public static MemoryStream GetStream(string resourceName)
+    {
+        var bytes = GetBytes(resourceName);
+        return bytes == null ? null : new MemoryStream(bytes);
+    }
+
+    public static byte[] GetBytes(string resourceName)
+    {
+        var name = CompleteName(resourceName);
+        if (name == null)
+            return null;
+
+//        var assembly = Assembly.GetExecutingAssembly();
+//        var assembly = typeof(DDFile).GetTypeInfo().Assembly;
+        using (Stream stream = name.Item1.GetManifestResourceStream(name.Item2)) {
+            using (var reader = new System.IO.BinaryReader(stream)) {
+                var bytes = reader.ReadBytes((int)stream.Length);
+                return bytes;
+            }
+        }
+    }
+
+
     //public static byte[] GetBytes(string name)
     //{
     //    byte[] bytes = null;

@@ -297,7 +297,7 @@ public abstract class DDIntervalAnimation : DDAnimation
 
 public class DDInstantAction : DDIntervalAnimation
 {
-    Action _action;
+    Action<DDNode> _action;
 
     public DDInstantAction()
         : base(0)
@@ -310,13 +310,23 @@ public class DDInstantAction : DDIntervalAnimation
         : base(0)
     {
         Duration = 0;
+        _action = it => {
+            if (action != null)
+                action();
+        };
+    }
+
+    public DDInstantAction(Action<DDNode> action, Action reverseAction = null)
+        : base(0)
+    {
+        Duration = 0;
         _action = action;
     }
 
     protected override void Start(DDNode target)
     {
         if (_action != null)
-            _action();
+            _action(target);
     }
 }
 

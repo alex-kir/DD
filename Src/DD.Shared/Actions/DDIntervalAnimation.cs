@@ -124,16 +124,16 @@ public class DDAnimate : DDIntervalAnimation
     }
 }
 
-public class DDKill : DDInstantAction
-{
-    public DDKill()
-        : base(null)
-    {
-    }
-
-    protected override void Start(DDNode target)
-    {
-        base.Start(target);
-        target.RemoveFromParent();
-    }
-}
+//public class DDKill : DDInstantAction
+//{
+//    public DDKill()
+//        : base(null)
+//    {
+//    }
+//
+//    protected override void Start(DDNode target)
+//    {
+//        base.Start(target);
+//        target.RemoveFromParent();
+//    }
+//}
