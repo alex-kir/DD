@@ -6,6 +6,8 @@ namespace Demo.Shared
     {
         public MyScene2()
         {
+//            AdjustWidth(600);
+
             DDFont.Default = new DDFont("roboto_fnt");
             DDLabel label;
 
@@ -13,13 +15,13 @@ namespace Demo.Shared
                 (label = new DDLabel("Hello world"){
                     Position = this.Size * DDVector.CenterMiddle,
                     Animations = {
-                        { "moving", (DDAnimations.MoveTo(1, 100, 200) + DDAnimations.MoveTo(1, 400, 200)).Repeat() },
+                        { "moving", (DDAnimations.MoveTo(3, 200, 200).EaseNurbs(0, 0, 1, 1) + DDAnimations.MoveTo(3, 400, 200).EaseNurbs(0, 0, 1, 1)).Repeat() },
 
                     }
                 })
             });
 
-            this.Animations.Add(DDAnimations.Delay(5) + DDAnimations.Exec(()=> label.Animations.Remove("moving")));
+//            this.Animations.Add(DDAnimations.Delay(5) + DDAnimations.Exec(()=> label.Animations.Remove("moving")));
         }
     }
 }
