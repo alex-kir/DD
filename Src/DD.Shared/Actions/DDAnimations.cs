@@ -38,8 +38,7 @@ public static class DDAnimations
 
     public static DDIntervalAnimation ScaleToSizeInner(float duration, DDVector xy)
     {
-//        return ScaleTo(duration, DDMath.MinXOrY(xy / this.Node.Size));
-        return new DDIntervalAnimation<DDVector>(duration, xy, it => it.ScaleXY * it.Size, (it, val) => it.ScaleXY = it.Size / val, DDVector.Lerp);
+        return new DDIntervalAnimation<DDVector>(duration, xy, it => it.ScaleXY * it.Size, (it, val) => it.Scale = DDMath.MinXOrY(val / it.Size), DDVector.Lerp);
     }
 
     public static DDIntervalAnimation ScaleToSizeInner(float duration, float x, float y)
@@ -86,7 +85,7 @@ public static class DDAnimations
         {
             try
             {
-                act();
+                DDDirector.Instance.PostMessage(act);
             }
             catch (Exception ex)
             {
@@ -103,7 +102,7 @@ public static class DDAnimations
         {
             try
             {
-                act(it);
+                DDDirector.Instance.PostMessage(() => act(it));
             }
             catch (Exception ex)
             {

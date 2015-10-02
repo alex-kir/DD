@@ -46,6 +46,7 @@ public partial class DDFile
     public static void LoadResourcesNames(Assembly assembly)
     {
         var names = assembly.GetManifestResourceNames();
+        DDDebug.Trace(names.DDJoinToString(","));
         _resourcesNames[assembly] = names;
     }
 
@@ -66,17 +67,18 @@ public partial class DDFile
 
     private static Tuple<Assembly, string> CompleteName(string resourceName)
     {
+        var resName = resourceName.ToLower();
         foreach (var kv in _resourcesNames) {
             var names = kv.Value;
-
-            var name = names.FirstOrDefault(it => it == resourceName);
+            var name = names.FirstOrDefault(it => it == resName);
             if (name == null)
-                name = names.FirstOrDefault(it => it.EndsWith(resourceName));
+                name = names.FirstOrDefault(it => it.EndsWith(resName));
             if (name == null)
-                name = names.FirstOrDefault(it => it.Contains("." + resourceName + "."));
+                name = names.FirstOrDefault(it => it.ToLower().Contains("." + resName + "."));
             if (name != null)
                 return Tuple.Create(kv.Key, name);
         }
+        DDDebug.Trace("RES NOT FOUND:" + resourceName);
         return null;
     }
 

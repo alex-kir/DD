@@ -179,6 +179,11 @@ public class DDMath
         return RadianToDegrees((float)(Math.Atan2(vv2.Y, vv2.X) - Math.Atan2(vv1.Y, vv1.X)));
     }
 
+    public static int Abs(int p)
+    {
+        return p < 0 ? -p : p;
+    }
+
     public static float Abs(float p)
     {
         return p < 0 ? -p : p;

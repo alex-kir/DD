@@ -11,6 +11,8 @@ public class DDNodeCollection : ICollection<DDNode>
 
 	public int Count { get { return _collection == null ? 0 : _collection.Count; } }
 
+    public DDNode this [int index]{ get { return _collection[index]; } }
+
 	public IEnumerable<DDNode> AllRecursive {
 		get {
 			return this.Concat (this.SelectMany (it => it.Children.AllRecursive));

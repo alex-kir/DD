@@ -6,7 +6,8 @@
     <SharedGUID>{E338DC66-A110-48EC-9F4F-7779CEC694EF}</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>DD.Shared</Import_RootNamespace>
+    <Import_RootNamespace>
+    </Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)DDAudio.cs" />
@@ -87,6 +88,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Actions\DDAnimationBuilder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Actions\DDIntervalAnimation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Actions\DDAnimations.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nodes\DDNodeTaps.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nodes\DDText.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)DDShader.shader" />
