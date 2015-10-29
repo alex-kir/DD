@@ -30,7 +30,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Linq;
 
-public class DDDebug
+public static class DDDebug
 {
 	private class MeasureForUsing : IDisposable
 	{
@@ -95,7 +95,7 @@ public class DDDebug
 #endif
 	}
 
-	public static void LogException(Exception ex)
+	public static void LogException(this Exception ex)
 	{
 		var msg = "##### [" + DateTime.Now.ToString("HH:mm:ss,ff") + "] " + (ex == null ? "<NULL>" : ex.ToString());
 

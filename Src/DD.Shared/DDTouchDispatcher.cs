@@ -171,13 +171,19 @@ public class DDTouchDispatcher
 
             if (new DDRectangle(handler.Node.Origin, handler.Node.Origin + handler.Node.Size).Contains(nodePos))
             {
-                var args = new DDTouchEventArgs {
+                var args = new DDTouchEventArgs
+                {
                     Phase = phase,
                     Position = nodePos,
                     Node = handler.Node,
                     Processed = false,
                 };
-                handler.Action(args);
+                try {
+                    handler.Action(args);
+                }
+                catch (Exception ex) {
+                    DDDebug.LogException(ex);
+                }
                 if (args.Processed)
                     break;
             }

@@ -24,6 +24,30 @@ public static class DDUtils
         return self;
     }
 
+    public static void OpenMarketForApp(string iosId, string androidId)
+    {
+#if DD_PLATFORM_ANDROID
+        
+        var uri = string.Format("market://details?id={0}", androidId ?? DDDirector.Instance.Activity.PackageName);
+#elif DD_PLATFORM_IOS
+        var uri = string.Format("https://itunes.apple.com/us/app/xxxx/id{0}?ls=1&mt=8", iosId);
+#endif        
+        OpenUri(uri);
+    }
+
+    public static void OpenUri(string uri)
+    {
+#if DD_PLATFORM_ANDROID
+        DDDirector.Instance.Activity.StartActivity(
+            new global::Android.Content.Intent(global::Android.Content.Intent.ActionView)
+            .SetData(global::Android.Net.Uri.Parse(uri))
+        );
+#elif DD_PLATFORM_IOS
+
+#endif        
+    }
+
+
     #if DD_PLATFORM_ANDROID
 
     private static Android.Content.ISharedPreferences _reader;

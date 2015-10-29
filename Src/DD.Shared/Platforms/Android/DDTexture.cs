@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using System.Text;
 using Android.Graphics;
 
-using OpenTK.Graphics.ES11;
+using OpenTK.Graphics.ES20;
 using Android.Opengl;
 using System.IO;
 
@@ -55,7 +55,85 @@ public partial class DDTexture
             byte[] bytes = DDFile.GetBytes(name);
             //GL.CompressedTexImage2D(All.Texture2D, 0, All., );
 
-            var bitmap = BitmapFactory.DecodeByteArray(bytes, 0, bytes.Length);
+//            try
+//            {
+//                var o = new BitmapFactory.Options();
+//                o.InJustDecodeBounds = true;
+//                var b1 = BitmapFactory.DecodeByteArray(bytes, 0, bytes.Length, o);
+//
+//                var b2 = Bitmap.CreateBitmap(b1.Width, b1.Height, Bitmap.Config.Argb8888);
+//                b2.
+//
+////                var b = Bitmap.CreateBitmap();
+//
+////                opts.InMutable = true;
+////                opts.InBitmap = b;
+////                opts.InBitmap.SetPremultiplied(false);
+////                opts.InPremultiplied = false; // to remove dirty contour;
+//            }
+//            catch(Exception ex)
+//            {
+//                ex.LogException();
+//            }
+            var bitmap = BitmapFactory.DecodeByteArray(bytes, 0, bytes.Length, null);
+//            bitmap.SetPremultiplied(false);
+//            try
+//            {
+//                int width = bitmap.Width;
+//                int height = bitmap.Height;
+//
+//                int [] pixels = new int[width * height];
+//                int [] pixelsSave = new int[width * height];
+//                bitmap.GetPixels(pixels, 0, width, 0, 0, width, height);
+//
+//                for (int x = 0; x < width; x++)
+//                {
+//                    for (int y = 0; y < height; y++)
+//                    {
+//                        int i = x + y * width;
+//                        pixelsSave[i] = pixels[i];
+//                        Color c = new Color(pixels[i]);
+//                        if (c.A > 0)
+//                            continue;
+//
+//                        int r = 0;
+//                        int g = 0;
+//                        int b = 0;
+//                        int count = 0;
+//
+//                        for (int xx = x - 2; xx <= x + 2; xx++) {
+//                            for (int yy = y - 2; yy <= y + 2; yy++) {
+//                                if (0 <= xx && xx < width && 0 <= yy && yy < height) {
+//                                    var cc = new Color(pixels[xx + yy * width]);
+//                                    if (cc.A == 0)
+//                                        continue;
+//                                    r += cc.R;
+//                                    g += cc.G;
+//                                    b += cc.B;
+//                                    count++;
+//                                }
+//                            }
+//                        }
+//
+//                        if (count == 0)
+//                            continue;
+//                        //Console.WriteLine(r + ", " + g + ", " + b + " / " + count);
+//                        pixelsSave[i] = new Color(r / count, g / count, b / count, 0).ToArgb();
+//                        //pixelsSave[x, y] = Color.FromArgb(0, 255, 0, 0);
+//
+//                    }
+//                }
+//                bitmap.SetPixels(pixelsSave, 0, width, 0, 0, width, height);
+//            }
+//            catch(Exception ex)
+//            {
+//                ex.LogException();
+//            }
+//            var c = bitmap.GetPixel(0, 0);
+//            DDDebug.Trace(name, c.ToString("x8"));
+//
+//
+
             //var bitmap = BitmapFactory.DecodeResource(DDDirector.Instance.Activity.Resources, id);
             Size = new DDVector(bitmap.Width, bitmap.Height);
 
@@ -67,7 +145,8 @@ public partial class DDTexture
             GL.TexParameter(All.Texture2D, All.TextureWrapS, (int)All.ClampToEdge);//Repeat
             GL.TexParameter(All.Texture2D, All.TextureWrapT, (int)All.ClampToEdge);//ClampToEdge
 
-            GLUtils.TexImage2D((int)All.Texture2D, 0, bitmap, 0);
+//            GL.TexImage2D(
+//            GLUtils.TexImage2D((int)All.Texture2D, 0, bitmap, 0);
 
             //var pixels = new byte[bitmap.Width * bitmap.Height * 4];
             //for (int x = 0; x < bitmap.Width; x++)
@@ -80,7 +159,40 @@ public partial class DDTexture
             //        pixels[x * 4 + y * bitmap.Width * 4 + 3] = (byte)(255);
             //    }
             //}
-            //GL.TexImage2D(All.Texture2D, 0, (int)All.Rgba, bitmap.Width, bitmap.Height, 0, All.Rgba, All.UnsignedByte, pixels); 
+            // GL.TexImage2D(All.Texture2D, 0, (int)All.Rgba, bitmap.Width, bitmap.Height, 0, All.Rgba, All.UnsignedByte, pixels); 
+
+            try{
+                int width = bitmap.Width;
+                int height = bitmap.Height;
+                int [] pixels = new int[width * height];
+
+                bitmap.GetPixels(pixels, 0, width, 0, 0, width, height);
+//                for (int x = 0; x < width; x++)
+                {
+//                    for (int y = 0; y < height; y++)
+                    for (int i = 0, n = width * height; i < n; i++)
+                    {
+//                        int i = x + y * width;
+                        int c = pixels[i];
+                        if (c == 0)
+                            continue;
+                        int a = (c >> 24) & 0xff;
+                        int r = (c >> 16) & 0xff;
+                        int g = (c >> 8) & 0xff;
+                        int b = (c) & 0xff;
+                        int c1 = (a << 24) | (b << 16) | (g << 8) | (r);
+                        pixels[i] = c1;
+                    }
+                }
+                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba,
+                    bitmap.Width, bitmap.Height, 0,
+                    OpenTK.Graphics.ES20.PixelFormat.Rgba, PixelType.UnsignedByte, pixels); 
+            }
+            catch(Exception ex)
+            {
+                ex.LogException();
+                GLUtils.TexImage2D((int)All.Texture2D, 0, bitmap, 0);
+            }
 
             bitmap.Recycle();
             bitmap = null;
@@ -105,7 +217,7 @@ public partial class DDTexture
         catch (Exception ex)
         {
             DDDebug.Trace(name);
-            DDDebug.LogException(ex);
+            ex.LogException();
         }
     }
 

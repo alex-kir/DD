@@ -46,6 +46,26 @@ public static class DDAnimations
         return ScaleToSizeInner(duration, new DDVector(x, y));
     }
 
+    public static DDIntervalAnimation ScaleToFitIn(float duration, DDVector xy)
+    {
+        return new DDIntervalAnimation<DDVector>(duration, xy, it => it.ScaleXY * it.Size, (it, val) => it.Scale = DDMath.MinXOrY(val / it.Size), DDVector.Lerp);
+    }
+
+    public static DDIntervalAnimation ScaleToFitIn(float duration, float x, float y)
+    {
+        return ScaleToFitIn(duration, new DDVector(x, y));
+    }
+
+    public static DDIntervalAnimation ScaleToFill(float duration, DDVector xy)
+    {
+        return new DDIntervalAnimation<DDVector>(duration, xy, it => it.ScaleXY * it.Size, (it, val) => it.ScaleXY = val / it.Size, DDVector.Lerp);
+    }
+
+    public static DDIntervalAnimation ScaleToFill(float duration, float x, float y)
+    {
+        return ScaleToFill(duration, new DDVector(x, y));
+    }
+
     public static DDIntervalAnimation ColorTo(float duration, DDColor color, float alpha)
     {
         return ColorTo(duration, new DDColor(color, alpha));
@@ -96,7 +116,7 @@ public static class DDAnimations
         return new DDInstantAction(act == null ? null : safeAction);
     }
 
-    public static DDIntervalAnimation Exec(System.Action<DDNode> act)
+    public static DDInstantAction Exec(System.Action<DDNode> act)
     {
         Action<DDNode> safeAction = it =>
         {
@@ -113,14 +133,29 @@ public static class DDAnimations
         return new DDInstantAction(act == null ? null : safeAction);
     }
 
-    public static DDIntervalAnimation Kill()
+    public static DDInstantAction Kill()
     {
-        return Exec(it => { it.RemoveFromParent(); });
+        return Exec(it => it.RemoveFromParent());
+    }
+
+    public static DDInstantAction Show()
+    {
+        return Exec(it => { it.Visible = true; });
+    }
+
+    public static DDInstantAction Hide()
+    {
+        return Exec(it => { it.Visible = false; });
     }
 
     public static DDAnimation Repeat(this DDAnimation self)
     {
         return new DDRepeatForever(self);
+    }
+
+    public static DDAnimation Repeat(this DDIntervalAnimation self, int times)
+    {
+        return new DDRepeat(self, times);
     }
 }
 

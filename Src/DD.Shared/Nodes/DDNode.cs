@@ -38,6 +38,8 @@ public partial class DDNode : IDisposable
     private DDMatrix _nodeToParentMatrix = new DDMatrix();
     private bool _isNodeToParentMatrixDirty;
 
+    //-------------------------------------------------------
+
     private DDVector _position;
     public virtual DDVector Position
     {
@@ -61,6 +63,8 @@ public partial class DDNode : IDisposable
     {
         Position = point;
     }
+
+    //-------------------------------------------------------
 
     private DDVector _rotation;
     public virtual DDVector RotationXY
@@ -97,6 +101,7 @@ public partial class DDNode : IDisposable
         RotationXY = rotation;
     }
 
+    //-------------------------------------------------------
 
     private DDVector _scale;
     public virtual DDVector ScaleXY
@@ -160,6 +165,12 @@ public partial class DDNode : IDisposable
         return this;
     }
 
+    public DDNode SetScaleOut(DDVector size)
+    {
+        this.Scale = DDMath.MaxXOrY(size / this.Size);
+        return this;
+    }
+
     public DDNode SetScaleFill(float width, float height)
 	{
 		this.SetScaleFill(new DDVector(width, height));
@@ -172,6 +183,30 @@ public partial class DDNode : IDisposable
         return this;
 	}
 
+    public DDVector ScaleToFillXY
+    {
+        set
+        {
+            SetScaleFill(value);
+        }
+    }
+
+    public DDVector ScaleToFitInXY
+    {
+        set
+        {
+            SetScaleIn(value);
+        }
+    }
+
+    public DDVector ScaleToFitOutXY
+    {
+        set
+        {
+            SetScaleOut(value);
+        }
+    }
+    //-------------------------------------------------------
 
     private DDVector _anchorPoint;
     public virtual DDVector AnchorPoint
@@ -196,6 +231,8 @@ public partial class DDNode : IDisposable
 	{
 		AnchorPoint = anchorPoint;
 	}
+
+    //-------------------------------------------------------
 
     private DDVector _size;
 
@@ -222,6 +259,8 @@ public partial class DDNode : IDisposable
 		Size = new DDVector(x, y);
 	}
 
+    //-------------------------------------------------------
+
     private DDVector _origin;
     public DDVector Origin
     {
@@ -241,6 +280,8 @@ public partial class DDNode : IDisposable
         Origin = new DDVector(x, y);
     }
 
+    //-------------------------------------------------------
+
 	public DDRectangle Bounds { get { return new DDRectangle(Origin, Origin + Size); } set { SetBounds (value); } }
 
 	public void SetBounds(DDRectangle rect)
@@ -248,6 +289,13 @@ public partial class DDNode : IDisposable
 		Origin = rect.LeftBottom;
 		Size = rect.Size;
 	}
+
+    public void SetBounds(float x1, float y1, float x2, float y2)
+    { 
+        SetBounds(new DDRectangle(x1, y1, x2, y2));
+    }
+
+    //-------------------------------------------------------
 
     public void PlaceStretched(float x, float y, float w, float h)
     {
@@ -318,7 +366,7 @@ public partial class DDNode : IDisposable
     public DDColor Color
     {
         get { return _color; }
-        set { _color = value; }
+        set { _color = value; _combinedColorDirty = true; }
     }
 	
 	public void SetColor(DDColor color, float alpha)

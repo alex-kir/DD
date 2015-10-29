@@ -26,6 +26,11 @@ public class DDText : DDNode
         
     }
 
+    public DDText(string text)
+    {
+        Text = text;
+    }
+
     private void UpdateInnerLabels()
     {
         if (Children == null) // called from constructor of DDNode

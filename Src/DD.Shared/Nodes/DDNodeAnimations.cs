@@ -35,9 +35,13 @@ public class DDNodeAnimations : ICollection<DDAnimation>
 
     internal void OnTick(float dt)
     {
-        foreach (var animation in animations)
-        {
-            DDAnimation.Step(animation, owner, dt);
+        foreach (var animation in animations) {
+            try {
+                DDAnimation.Step(animation, owner, dt);
+            }
+            catch (Exception ex) {
+                DDDebug.LogException(ex);
+            }
         }
         animations.RemoveAll(a => a.IsDone);
         if (animations.Count == 0)

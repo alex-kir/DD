@@ -90,6 +90,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Actions\DDAnimations.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nodes\DDNodeTaps.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nodes\DDText.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Android\DDDirector.GLView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Android\DDDirector.Opengl2View.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Android\DDShader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Android\DDRendererGL2.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)DDShader.shader" />

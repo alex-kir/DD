@@ -124,7 +124,12 @@ public partial class DDDirector
         {
             foreach (var action in messageLoopCopy)
             {
-                action();
+                try {
+                    action();
+                }
+                catch (Exception ex) {
+                    DDDebug.LogException(ex);
+                }
             }
         }
     }

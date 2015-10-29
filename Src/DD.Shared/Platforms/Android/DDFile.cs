@@ -40,7 +40,7 @@ using Android.Widget;
 
 public partial class DDFile
 {
-    static string []_assersList = null;
+//    static string []_assersList = null;
 
 //    public static byte[] GetBytes(string name)
 //    {

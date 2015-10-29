@@ -1,5 +1,5 @@
 //
-//  DDDirector_Android.cs
+//  DDDirector.cs
 //
 //  DD engine for 2d games and apps: https://code.google.com/p/dd-engine/
 //
@@ -23,156 +23,54 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 //
-using System.Linq;
+using Android.Widget;
+
 
 
 #if DD_PLATFORM_ANDROID
 
 using System;
+using System.Linq;
 using OpenTK.Graphics.ES11;
 using Android.Views;
 using Android.App;
 using Android.OS;
 using Android.Content.PM;
+using Android.Content;
+
+//using TOpenglView = DDDirector.Opengl2View;
+using TOpenglView = DDDirector.GLView;
 
 public partial class DDDirector
 {
-    class GLView : OpenTK.Platform.Android.AndroidGameView
-    {
-        DDRenderer renderer;
+    public FrameLayout RootLayout { get; private set; }
+    TOpenglView _glView;
 
-        public GLView(Android.Content.Context context, DDRenderer rndr)
-            : base(context)
-        {
-            renderer = rndr;
-        }
-
-        // This gets called when the drawing surface is ready
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-
-            GL.Enable(All.Texture2D);			//Enable Texture Mapping ( NEW )
-            GL.ShadeModel(All.Smooth); 			//Enable Smooth Shading
-            //GL.ClearColor(0.0f, 0.0f, 0.0f, 0.5f); 	//Black Background
-            //GL.ClearDepth(1.0f); 					//Depth Buffer Setup
-            //GL.Enable(All.DepthTest); 			//Enables Depth Testing
-            //GL.DepthFunc(All.Lequal); 			//The Type Of Depth Testing To Do
-
-            GL.Hint(All.PerspectiveCorrectionHint, All.Nicest);
-
-            //GL.BlendFunc(All.SrcAlpha, All.OneMinusSrcAlpha);
-            GL.BlendFunc(All.One, All.OneMinusSrcAlpha);
-            GL.Enable(All.Blend);
-
-            DDDirector.Instance.UpdateWinSize();
-
-            try
-            {
-                if (DDDirector.Instance._initialScene != null)
-                {
-                    DDDirector.Instance.SetScene(DDDirector.Instance._initialScene());
-                    DDDirector.Instance._initialScene = null;
-                }
-            }
-            catch (Exception ex)
-            {
-                DDDebug.LogException(ex);
-                //System.Diagnostics.Debugger.Break();
-            }
-
-            // Run the render loop
-            Run();
-        }
-
-        protected override void OnResize(EventArgs e)
-        {
-            base.OnResize(e);
-
-            DDDirector.Instance.UpdateWinSize();
-        }
-
-        // This gets called on each frame render
-        protected override void OnRenderFrame(OpenTK.FrameEventArgs e)
-        {
-            base.OnRenderFrame(e);
-            float t = Math.Min(Math.Max((float)e.Time, 1f / DDDirector.Instance.FrameRate), 1f);
-            DDDirector.Instance.OnTick(t);
-
-            GL.MatrixMode(All.Projection);
-            GL.LoadIdentity();
-            GL.Ortho(0, DDDirector.Instance.WinSize.Width, 0, DDDirector.Instance.WinSize.Height, -1.0f, 1.0f);
-
-            GL.MatrixMode(All.Modelview);
-
-            GL.ClearColor(0f, 0f, 0f, 1.0f);
-            //GL.Clear((uint)All.ColorBufferBit);
-            GL.Clear(ClearBufferMask.ColorBufferBit);
-            GL.Disable(All.DepthTest);
-            GL.Disable(All.Lighting);
-
-            DDDirector.Instance.OnDraw(renderer);
-
-            SwapBuffers();
-        }
-
-        public override bool OnTouchEvent(MotionEvent e)
-        {
-            bool ret = false;
-            for (int i = 0, n = e.PointerCount; i < n; i++)
-            {
-                int id = e.GetPointerId(i);
-                float x = e.GetX(i);
-                float y = Height - e.GetY(i);
-                //DDDebug.Log("action = ", e.Action, "/", e.ActionMasked, "; id = ", id, "; x = ", x, "; y = ", y);
-                if (e.ActionMasked == MotionEventActions.Down)
-                {
-                    DDTouchDispatcher.Instance.OnTouch(id, x, y, DDTouchPhase.Began);
-                    ret = true;
-                }
-                else if (e.Action == MotionEventActions.Move)
-                {
-                    DDTouchDispatcher.Instance.OnTouch(id, x, y, DDTouchPhase.Moved);
-                    ret = true;
-                }
-                else if (e.Action == MotionEventActions.Up)
-                {
-                    DDTouchDispatcher.Instance.OnTouch(id, x, y, DDTouchPhase.Ended);
-                    ret = true;
-                }
-            }
-
-            // -----------------------------------------
-
-            var touches = Enumerable.Range(0, e.PointerCount)
-                .Select(it => {
-                    int id = e.GetPointerId(it);
-                    float x = e.GetX(it);
-                    float y = Height - e.GetY(it);
-
-                    var touch = new DDTouch();
-                    touch.Position = new DDVector(x,y);
-                    touch.Finger = id;
-
-                    if (e.ActionMasked == MotionEventActions.Down)
-                        touch.Phase = DDTouchPhase.Began;
-                    else if(e.Action == MotionEventActions.Move)
-                        touch.Phase = DDTouchPhase.Moved;
-                    else if (e.Action == MotionEventActions.Up)
-                        touch.Phase = DDTouchPhase.Ended;
-                    return touch;
-                }).ToArray();
-
-            DDTouchDispatcher.Instance.OnTouches(touches);
-
-            ret = true;
-            return ret;// base.OnTouchEvent(e);
-        }
-    }
-
-    GLView _glView;
     Func<DDScene> _initialScene;
     public Android.App.Activity Activity { get; private set; }
+    DDRenderer renderer;
+
+
+    public class ActivityResultArgs
+    {
+        public readonly int RequestCode;
+        public readonly Result ResultCode;
+        public readonly Intent Data;
+
+        public ActivityResultArgs(int requestCode, Result resultCode, Intent data)
+        {
+            RequestCode = requestCode;
+            ResultCode = resultCode;
+            Data = data;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("[ActivityResultArgs: RequestCode={0}, ResultCode={1}, Data={2}]", RequestCode, ResultCode, Data);
+        }
+    };
+
+    public event Action<ActivityResultArgs> ActivityResult;
 
     public void Quit()
     {
@@ -189,20 +87,24 @@ public partial class DDDirector
         WinSize = _glView.Size;
     }
 
-    public void OnCreate(Activity activity1, Bundle bundle, ScreenOrientation orientation, int frameRate, DDRenderer rndr, Func<DDScene> scene)
+    public void OnCreate(Activity activity1, Bundle bundle, ScreenOrientation orientation, int frameRate, DDRenderer renderer, Func<DDScene> scene)
     {
+        this.renderer = renderer;
         this.Activity = activity1;
         this.FrameRate = frameRate;
         this.Activity.RequestWindowFeature(WindowFeatures.NoTitle);
         this.Activity.Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
         this.Activity.RequestedOrientation = orientation;
 
-        _glView = new GLView(this.Activity, rndr);
-        this.Activity.SetContentView(_glView);
-
+        _initialScene = scene;
         DPI = DDUtils.GetDPI();
         DDTouchDispatcher.Instance.GetHashCode();
-        _initialScene = scene;
+
+        RootLayout = new FrameLayout(this.Activity);
+        _glView = new TOpenglView(this.Activity, this);
+        RootLayout.AddView(_glView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent));
+        this.Activity.SetContentView(RootLayout);
+
 
     }
 
@@ -214,6 +116,26 @@ public partial class DDDirector
     public void OnResume(Activity activity1)
     {
         _glView.Resume();
+    }
+
+    public void OnActivityResult(int requestCode, Result resultCode, Intent data)
+    {
+        if (ActivityResult != null)
+            ActivityResult(new ActivityResultArgs(requestCode, resultCode, data));
+    }
+
+    void SetInitialScene()
+    {
+        if (_initialScene != null)
+        {
+            SetScene(DDDirector.Instance._initialScene());
+            _initialScene = null;
+        }
+    }
+
+    void DrawScene()
+    {
+        OnDraw(renderer);
     }
 }
 

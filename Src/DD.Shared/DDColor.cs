@@ -142,6 +142,11 @@ public struct DDColor
         return new DDColor(c1.R * c2.R, c1.G * c2.G, c1.B * c2.B, c1.A * c2.A);
     }
 
+    public static DDColor operator + (DDColor c1, DDColor c2)
+    {
+        return new DDColor((c1.R + c2.R) / 2, (c1.G + c2.G) / 2, (c1.B + c2.B) / 2, (c1.A + c2.A) / 2);
+    }
+
     public static DDColor Lerp(DDColor c1, DDColor c2, float t)
     {
         return new DDColor(
@@ -154,5 +159,10 @@ public struct DDColor
     public DDColor Negative()
     {
         return new DDColor(1 - R, 1 - G, 1 - B);
+    }
+
+    public DDColor WithAlpha(float a)
+    {
+        return new DDColor(R, G, B, a);
     }
 }

@@ -124,6 +124,13 @@ public class DDNodeCollection : ICollection<DDNode>
         item.IsRunning = false;
 		return Collection.Remove(item);
 	}
+
+    public void RemoveAt(int index)
+    {
+        var item = this[index];
+        this.Remove(item);
+//        Collection.RemoveAt(index);
+    }
 //
 //	public int Count {
 //		get {
