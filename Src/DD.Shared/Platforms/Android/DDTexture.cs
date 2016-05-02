@@ -41,19 +41,20 @@ public partial class DDTexture
     //float[] _vertexFloats;
     //float[] _textureFloats;
 
-    public DDTexture()
-    {
-        Name = null;
-        _textureId = -1;
-        Size = new DDVector(4, 4);
-    }
+//    public DDTexture()
+//    {
+//        Name = null;
+//        _textureId = -1;
+//        Size = new DDVector(4, 4);
+//    }
 
     public DDTexture(string name)
     {
-        try
-        {
-            byte[] bytes = DDFile.GetBytes(name);
-            //GL.CompressedTexImage2D(All.Texture2D, 0, All., );
+        using (var measure = DDDebug.Measure("DDTexture load")) {
+            
+            try {
+                byte[] bytes = DDFile.GetBytes(name);
+                //GL.CompressedTexImage2D(All.Texture2D, 0, All., );
 
 //            try
 //            {
@@ -75,7 +76,7 @@ public partial class DDTexture
 //            {
 //                ex.LogException();
 //            }
-            var bitmap = BitmapFactory.DecodeByteArray(bytes, 0, bytes.Length, null);
+                var bitmap = BitmapFactory.DecodeByteArray(bytes, 0, bytes.Length, null);
 //            bitmap.SetPremultiplied(false);
 //            try
 //            {
@@ -134,48 +135,54 @@ public partial class DDTexture
 //
 //
 
-            //var bitmap = BitmapFactory.DecodeResource(DDDirector.Instance.Activity.Resources, id);
-            Size = new DDVector(bitmap.Width, bitmap.Height);
+                //var bitmap = BitmapFactory.DecodeResource(DDDirector.Instance.Activity.Resources, id);
+                Size = new DDVector(bitmap.Width, bitmap.Height);
 
-            GL.GenTextures(1, out _textureId);
-            GL.BindTexture(All.Texture2D, _textureId);
+                GL.GenTextures(1, out _textureId);
+//            GL.BindTexture(All.Texture2D, _textureId);
+                GL.BindTexture(TextureTarget.Texture2D, _textureId);
 
-            GL.TexParameter(All.Texture2D, All.TextureMinFilter, (int)All.Linear);//All.Nearest);
-            GL.TexParameter(All.Texture2D, All.TextureMagFilter, (int)All.Linear);
-            GL.TexParameter(All.Texture2D, All.TextureWrapS, (int)All.ClampToEdge);//Repeat
-            GL.TexParameter(All.Texture2D, All.TextureWrapT, (int)All.ClampToEdge);//ClampToEdge
+//            GL.TexParameter(All.Texture2D, All.TextureMinFilter, (int)All.Linear);//All.Nearest);
+//            GL.TexParameter(All.Texture2D, All.TextureMagFilter, (int)All.Linear);
+//            GL.TexParameter(All.Texture2D, All.TextureWrapS, (int)All.ClampToEdge);//Repeat
+//            GL.TexParameter(All.Texture2D, All.TextureWrapT, (int)All.ClampToEdge);//ClampToEdge
+
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);//All.Nearest);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);//Repeat
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);//ClampToEdge
 
 //            GL.TexImage2D(
 //            GLUtils.TexImage2D((int)All.Texture2D, 0, bitmap, 0);
 
-            //var pixels = new byte[bitmap.Width * bitmap.Height * 4];
-            //for (int x = 0; x < bitmap.Width; x++)
-            //{
-            //    for (int y = 0; y < bitmap.Height; y++)
-            //    {
-            //        pixels[x * 4 + y * bitmap.Width * 4 + 0] = (byte)(x % 255);
-            //        pixels[x * 4 + y * bitmap.Width * 4 + 1] = (byte)(x % 255);
-            //        pixels[x * 4 + y * bitmap.Width * 4 + 2] = (byte)(x % 255);
-            //        pixels[x * 4 + y * bitmap.Width * 4 + 3] = (byte)(255);
-            //    }
-            //}
-            // GL.TexImage2D(All.Texture2D, 0, (int)All.Rgba, bitmap.Width, bitmap.Height, 0, All.Rgba, All.UnsignedByte, pixels); 
+                //var pixels = new byte[bitmap.Width * bitmap.Height * 4];
+                //for (int x = 0; x < bitmap.Width; x++)
+                //{
+                //    for (int y = 0; y < bitmap.Height; y++)
+                //    {
+                //        pixels[x * 4 + y * bitmap.Width * 4 + 0] = (byte)(x % 255);
+                //        pixels[x * 4 + y * bitmap.Width * 4 + 1] = (byte)(x % 255);
+                //        pixels[x * 4 + y * bitmap.Width * 4 + 2] = (byte)(x % 255);
+                //        pixels[x * 4 + y * bitmap.Width * 4 + 3] = (byte)(255);
+                //    }
+                //}
+                // GL.TexImage2D(All.Texture2D, 0, (int)All.Rgba, bitmap.Width, bitmap.Height, 0, All.Rgba, All.UnsignedByte, pixels); 
+                try {
+                    int width = bitmap.Width;
+                    int height = bitmap.Height;
+                    int[] pixels = new int[width * height];
 
-            try{
-                int width = bitmap.Width;
-                int height = bitmap.Height;
-                int [] pixels = new int[width * height];
+//                DDDebug.Trace("start");
 
-                bitmap.GetPixels(pixels, 0, width, 0, 0, width, height);
-//                for (int x = 0; x < width; x++)
-                {
-//                    for (int y = 0; y < height; y++)
-                    for (int i = 0, n = width * height; i < n; i++)
-                    {
-//                        int i = x + y * width;
+                    bitmap.GetPixels(pixels, 0, width, 0, 0, width, height);
+
+//                DDDebug.Trace("1");
+
+                    for (int i = 0, n = width * height; i < n; i++) {
                         int c = pixels[i];
                         if (c == 0)
                             continue;
+
                         int a = (c >> 24) & 0xff;
                         int r = (c >> 16) & 0xff;
                         int g = (c >> 8) & 0xff;
@@ -183,46 +190,74 @@ public partial class DDTexture
                         int c1 = (a << 24) | (b << 16) | (g << 8) | (r);
                         pixels[i] = c1;
                     }
+
+//                DDDebug.Trace("2");
+
+                    for (int y = 0; y < height; y++) {
+                        for (int x1 = 0, x2 = 1; x2 < width; x1++, x2++) {
+                            int i1 = x1 + y * width;
+                            int i2 = x2 + y * width;
+                            int c1 = pixels[i1];
+                            int c2 = pixels[i2];
+
+                            int a1 = c1 >> 24;
+                            int a2 = c2 >> 24;
+                            if ((a1 == 0) && (a2 != 0)) {
+                                pixels[i1] = c2 & 0x00ffffff;
+                            }
+
+                            if ((a1 != 0) && (a2 == 0)) {
+                                pixels[i2] = c1 & 0x00ffffff;
+                            }
+                        }
+                    }
+
+                    for (int x = 0; x < width; x++) {
+                        for (int y1 = 0, y2 = 1; y2 < height; y1++, y2++) {
+                            int i1 = x + y1 * width;
+                            int i2 = x + y2 * width;
+                            int c1 = pixels[i1];
+                            int c2 = pixels[i2];
+
+                            int a1 = c1 >> 24;
+                            int a2 = c2 >> 24;
+                            if ((a1 == 0) && (a2 != 0)) {
+                                pixels[i1] = c2 & 0x00ffffff;
+                            }
+
+                            if ((a1 != 0) && (a2 == 0)) {
+                                pixels[i2] = c1 & 0x00ffffff;
+                            }
+                        }
+                    }
+//                DDDebug.Trace("3");
+
+
+                    GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba,
+                        bitmap.Width, bitmap.Height, 0,
+                        OpenTK.Graphics.ES20.PixelFormat.Rgba, PixelType.UnsignedByte, pixels); 
+
+//                DDDebug.Trace("end");
                 }
-                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba,
-                    bitmap.Width, bitmap.Height, 0,
-                    OpenTK.Graphics.ES20.PixelFormat.Rgba, PixelType.UnsignedByte, pixels); 
+                catch (Exception ex) {
+                    ex.LogException();
+                    GLUtils.TexImage2D((int)All.Texture2D, 0, bitmap, 0);
+                }
+
+                bitmap.Recycle();
+                bitmap = null;
+
             }
-            catch(Exception ex)
-            {
+            catch (Exception ex) {
+                DDDebug.Trace(name);
                 ex.LogException();
-                GLUtils.TexImage2D((int)All.Texture2D, 0, bitmap, 0);
             }
-
-            bitmap.Recycle();
-            bitmap = null;
-
-            //_vertexFloats = new float[] {
-            //    0,          0,           0,
-            //    0,          Size.Height, 0,
-            //    Size.Width, Size.Height, 0,
-            //    Size.Width, 0,           0,
-            //};
-            
-            //float pixw = 1 / Size.Width;
-            //float pixh = 1 / Size.Height;
-
-            //_textureFloats = new float[] {
-            //    0 + pixw, 1 - pixh,
-            //    0 + pixw, 0 + pixh,
-            //    1 - pixw, 0 + pixh,
-            //    1 - pixw, 1 - pixh,
-            //};
-        }
-        catch (Exception ex)
-        {
-            DDDebug.Trace(name);
-            ex.LogException();
         }
     }
 
     public DDTexture(string name, byte [] bytes)
     {
+        throw new NotImplementedException();
     }
 
     //public void Draw(DDColor color)

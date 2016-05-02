@@ -77,17 +77,17 @@ public class DDSlicedSprite : DDNode
 			DDDebug.Log("DDSlicedSprite " + _frame.Texture.Name + " width or height too small");
 		Size = new DDVector(DDMath.Max(minSizeX, width), DDMath.Max(minSizeY, height));
 
-		_leftBottom = Children.Add(new DDSprite(_frame.SubFrame(new DDRectangle(0, 0,      left, bottom))));
-		_leftMiddle = Children.Add(new DDSprite(_frame.SubFrame(new DDRectangle(0, bottom, left, top))));
-		_leftTop    = Children.Add(new DDSprite(_frame.SubFrame(new DDRectangle(0, top,    left, 1))));
+		Children.Add(_leftBottom = new DDSprite(_frame.SubFrame(new DDRectangle(0, 0,      left, bottom))));
+		Children.Add(_leftMiddle = new DDSprite(_frame.SubFrame(new DDRectangle(0, bottom, left, top))));
+		Children.Add(_leftTop    = new DDSprite(_frame.SubFrame(new DDRectangle(0, top,    left, 1))));
 
-		_centerBottom = Children.Add(new DDSprite(_frame.SubFrame(new DDRectangle(left, 0,      right, bottom))));
-		_centerMiddle = Children.Add(new DDSprite(_frame.SubFrame(new DDRectangle(left, bottom, right, top))));
-		_centerTop    = Children.Add(new DDSprite(_frame.SubFrame(new DDRectangle(left, top,    right, 1))));
+		Children.Add(_centerBottom = new DDSprite(_frame.SubFrame(new DDRectangle(left, 0,      right, bottom))));
+		Children.Add(_centerMiddle = new DDSprite(_frame.SubFrame(new DDRectangle(left, bottom, right, top))));
+		Children.Add(_centerTop    = new DDSprite(_frame.SubFrame(new DDRectangle(left, top,    right, 1))));
 
-		_rightBottom = Children.Add(new DDSprite(_frame.SubFrame(new DDRectangle(right, 0,      1, bottom))));
-		_rightMiddle = Children.Add(new DDSprite(_frame.SubFrame(new DDRectangle(right, bottom, 1, top))));
-		_rightTop    = Children.Add(new DDSprite(_frame.SubFrame(new DDRectangle(right, top,    1, 1))));
+		Children.Add(_rightBottom = new DDSprite(_frame.SubFrame(new DDRectangle(right, 0,      1, bottom))));
+		Children.Add(_rightMiddle = new DDSprite(_frame.SubFrame(new DDRectangle(right, bottom, 1, top))));
+		Children.Add(_rightTop    = new DDSprite(_frame.SubFrame(new DDRectangle(right, top,    1, 1))));
 		
 		_leftBottom.AnchorPoint = DDVector.LeftBottom;
 		_leftBottom.Position    = DDVector.LeftBottom * Size;

@@ -26,7 +26,7 @@
 using OpenTK.Graphics.ES20;
 
 
-#if DD_PLATFORM_ANDROID
+#if DD_PLATFORM_ANDROID && false
 using System;
 //using OpenTK.Graphics.ES11;
 

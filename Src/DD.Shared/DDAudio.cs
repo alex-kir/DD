@@ -38,11 +38,11 @@ using Android.Content;
 using Android.Media;
 #endif
 
-class DDAudio
+public static partial class DDAudio
 {
-    private static DDAudio _instance = new DDAudio();
-    public static DDAudio Instance { get { return _instance; } }
-    private DDAudio() { }
+//    private static DDAudio _instance = new DDAudio();
+//    public static DDAudio Instance { get { return _instance; } }
+//    private DDAudio() { }
 
 #if DD_PLATFORM_UNITY3D
 
@@ -269,6 +269,7 @@ class DDAudio
     }
 
 #elif DD_PLATFORM_ANDROID
+#if false
     
     private static SoundPool soundPool;
     private static AudioManager audioManager;
@@ -344,11 +345,12 @@ class DDAudio
     {
         // TODO: throw new NotImplementedException();
     }
+#endif
 #else
-    public float MusicVolume { set { } }
-    public float EffectsVolume { set { } }
-    public void PlayMusic(string name) { }
-    public void PlayEffect(string name) { }
-	public float GetLength(string name) { return 1; }
+//    public static float MusicVolume { set { } }
+//    public static float EffectsVolume { set { } }
+//    public static void PlayMusic(string name) { }
+//    public static void PlayEffect(string name) { }
+//	public static float GetLength(string name) { return 1; }
 #endif
 }

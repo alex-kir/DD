@@ -34,9 +34,13 @@ public partial class DDDirector
     public static DDDirector Instance { get { return _instance; } }
 
     public DDScene Scene { get; private set; }
-	public DDVector WinSize { get; protected set; }
+    [Obsolete]
+    public DDVector WinSize { get { return ScreenResolution; } }
+    public DDVector ScreenResolution { get; protected set; }
 	public float DPI { get; protected set; }
-	public float FrameRate { get; protected set; }
+//	public float FrameRate { get; protected set; }
+
+
 
     private List<Action> _messageLoop = new List<Action>();
 
@@ -46,6 +50,13 @@ public partial class DDDirector
 	{
 		EscapePressed = Quit;
 	}
+
+    internal void UpdateVideoInfo(DDVector winSize, float dpi, float frameRate)
+    {
+        ScreenResolution = winSize;
+        DPI = dpi;
+//        FrameRate = frameRate;
+    }
 
     internal void OnTick(float t)
     {
@@ -59,6 +70,11 @@ public partial class DDDirector
             if (Scene != null)
                 CallResetCache(Scene);
         }
+    }
+
+    internal void DrawScene()
+    {
+        OnDraw(renderer);
     }
 
     internal void OnDraw(DDRenderer renderer)
@@ -155,6 +171,26 @@ public partial class DDDirector
 				DDTextureManager.Instance.PurgeUnusedTexture();
         });
     }
+
+    Func<DDScene> _initialScene = null;
+
+    public void LoadInitialScene()
+    {
+        try
+        {
+            if (_initialScene != null)
+            {
+                SetScene(_initialScene());
+                _initialScene = null;
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.LogException();
+            //System.Diagnostics.Debugger.Break();
+        }
+    }
+
 
     public Action EscapePressed { get; set; }
 

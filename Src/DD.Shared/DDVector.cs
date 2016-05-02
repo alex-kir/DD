@@ -97,21 +97,38 @@ public struct DDVector
 
 #if DD_PLATFORM_IOS
 
-public DDVector(System.Drawing.SizeF v)
-{
-	x = v.Width;
-	y = v.Height;
-}
+    public DDVector(nfloat x, nfloat y)
+    {
+        X = (float)x;
+        Y = (float)y;
+    }
 
-public static implicit operator System.Drawing.SizeF(DDVector v)
-{
-	return new System.Drawing.SizeF(v.X, v.Y);
-}
+    public DDVector(System.Drawing.SizeF v)
+    {
+    	X = v.Width;
+    	Y = v.Height;
+    }
 
-public static implicit operator DDVector(System.Drawing.SizeF v)
-{
-	return new DDVector(v.Width, v.Height);
-}
+    public static implicit operator System.Drawing.SizeF(DDVector v)
+    {
+    	return new System.Drawing.SizeF(v.X, v.Y);
+    }
+
+    public static implicit operator DDVector(System.Drawing.SizeF v)
+    {
+    	return new DDVector(v.Width, v.Height);
+    }
+
+    public static implicit operator DDVector(CoreGraphics.CGSize v)
+    {
+        return new DDVector(v.Width, v.Height);
+    }
+
+    public static DDVector operator *(DDVector v1, nfloat n)
+    {
+        return new DDVector(v1.X * n, v1.Y * n);
+    }
+
 
 #endif 
 

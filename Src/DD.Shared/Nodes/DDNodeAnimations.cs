@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 
 public class DDNodeAnimations : ICollection<DDAnimation>
@@ -8,7 +9,7 @@ public class DDNodeAnimations : ICollection<DDAnimation>
     readonly DDNode owner;
     bool registered = false;
 
-    public DDAnimationBuilder Builder { get { return new DDAnimationBuilder(owner); } }
+    //public DDAnimationBuilder Builder { get { return new DDAnimationBuilder(owner); } }
 
     public DDNodeAnimations (DDNode owner)
 	{
@@ -17,7 +18,7 @@ public class DDNodeAnimations : ICollection<DDAnimation>
 
     internal void Register()
     {
-        if (owner.IsRunning && animations.Count > 0)
+        if (!registered && owner.IsRunning && animations.Count > 0)
         {
             DDScheduler.Instance.RegisterForAnimations(owner);
             registered = true;
@@ -46,6 +47,15 @@ public class DDNodeAnimations : ICollection<DDAnimation>
         animations.RemoveAll(a => a.IsDone);
         if (animations.Count == 0)
             Unregister();
+    }
+
+    public void Queue(string name, DDAnimation item)
+    {
+        float delay = animations.Where(it => it.Name == name).OfType<DDIntervalAnimation>()
+            .Aggregate(0f, (a, b) => Math.Max(a, b.Duration - b.Elapsed));
+        var anim = delay > 0 ? DDAnimations.Delay(delay) + item : item;
+        anim.Name = name;
+        Add(anim);
     }
 
     #region ICollection implementation

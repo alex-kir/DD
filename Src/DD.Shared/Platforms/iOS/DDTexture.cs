@@ -23,11 +23,15 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 //
+
+
 #if DD_PLATFORM_IOS
 
 using System;
-using MonoTouch.UIKit;
 using System.Drawing;
+using UIKit;
+using Foundation;
+using CoreGraphics;
 
 using All1 = OpenTK.Graphics.ES11.All;
 using GL1 = OpenTK.Graphics.ES11.GL;
@@ -39,13 +43,16 @@ using GL1 = OpenTK.Graphics.ES11.GL;
 public partial class DDTexture
 {
 	int _textureId = -1;
+    public int TextureId { get { return _textureId; } }
 	float[] _vertexFloats2;
 //	float[] _vertexFloats3;
 	float[] _textureFloats;
 
 	public DDTexture(string name)
 	{
-		UIImage image1 = UIImage.LoadFromData(DDFile.GetData(name));
+        var data = NSData.FromArray(DDFile.GetBytes(name));
+
+		UIImage image1 = UIImage.LoadFromData(data);
 		if (image1 == null)
 			DDDebug.Log(@"Do real error checking here");
 
@@ -60,74 +67,92 @@ public partial class DDTexture
 		GL1.TexParameter(All1.Texture2D, All1.TextureWrapT, (int)All1.ClampToEdge);//ClampToEdge
 
 
-		MonoTouch.CoreGraphics.CGImage image = image1.CGImage;
+		CGImage image = image1.CGImage;
 		byte[] pixels = new byte[image.Width * image.Height * 4];
-		var context = new MonoTouch.CoreGraphics.CGBitmapContext(pixels, image.Width, image.Height, 8, image.Width * 4, image.ColorSpace, MonoTouch.CoreGraphics.CGImageAlphaInfo.PremultipliedLast);
+		var context = new CGBitmapContext(pixels, image.Width, image.Height, 8, image.Width * 4, image.ColorSpace, CGImageAlphaInfo.PremultipliedLast);
 		context.DrawImage(new RectangleF(0, 0, image.Width, image.Height), image);
-		GL1.TexImage2D(All1.Texture2D, 0, (int)All1.Rgba, image.Width, image.Height, 0, All1.Rgba, All1.UnsignedByte, pixels);
+        GL1.TexImage2D(All1.Texture2D, 0, (int)All1.Rgba,
+            (int)image.Width, (int)image.Height, 0,
+            All1.Rgba, All1.UnsignedByte, pixels);
 
-        _vertexFloats2 = new float[] {
-			0,          0,          
-			0,          Size.Height,
-			Size.Width, Size.Height,
-			Size.Width, 0,          
-		};
-
-		float pixw = 1 / Size.Width;
-		float pixh = 1 / Size.Height;
-		
-		_textureFloats = new float[] {
-			0 + pixw, 1 - pixh,
-			0 + pixw, 0 + pixh,
-			1 - pixw, 0 + pixh,
-			1 - pixw, 1 - pixh,
-		};
+//        _vertexFloats2 = new float[] {
+//			0,          0,          
+//			0,          Size.Height,
+//			Size.Width, Size.Height,
+//			Size.Width, 0,          
+//		};
+//
+//		float pixw = 1 / Size.Width;
+//		float pixh = 1 / Size.Height;
+//		
+//		_textureFloats = new float[] {
+//			0 + pixw, 1 - pixh,
+//			0 + pixw, 0 + pixh,
+//			1 - pixw, 0 + pixh,
+//			1 - pixw, 1 - pixh,
+//		};
 	}
 
-	public void Draw (DDColor color)
-	{
-		if (_vertexFloats2 == null || _textureFloats == null)
-			return;
+    public DDTexture(string name, byte [] bytes)
+    {
+    }
 
-		var _colorVertex = new float[] {
-			color.R, color.G, color.B, color.A,
-			color.R, color.G, color.B, color.A,
-			color.R, color.G, color.B, color.A,
-			color.R, color.G, color.B, color.A,
-		};
+    public void Unload()
+    {
+        throw new NotImplementedException();
+    }
 
-		//if (!GL.IsTexture(_textureId))
-		//{
-		//    reload texture;
-		//}
-		
-		GL1.BindTexture(All1.Texture2D, _textureId);
-		GL1.CullFace(All1.FrontAndBack);
-		GL1.FrontFace(All1.Cw);
-
-		GL1.Disable(All1.DepthTest);
-		GL1.Disable(All1.Lighting);
-		GL1.Disable(All1.AlphaTest);
-		
-		GL1.BlendFunc(All1.One, All1.OneMinusSrcAlpha);
-		GL1.Enable(All1.Blend);
-
-
-		GL1.EnableClientState (All1.VertexArray);
-		GL1.EnableClientState (All1.ColorArray);
-		GL1.EnableClientState(All1.TextureCoordArray);
-
-		GL1.VertexPointer (2, All1.Float, 0, _vertexFloats2);
-		GL1.ColorPointer (4, All1.Float, 0, _colorVertex);
-		GL1.TexCoordPointer(2, All1.Float, 0, _textureFloats);
-
-
-		GL1.DrawArrays(All1.TriangleFan, 0, _vertexFloats2.Length / 2);
-		
-		GL1.DisableClientState(All1.VertexArray);
-		GL1.DisableClientState(All1.ColorArray);
-		GL1.DisableClientState(All1.TextureCoordArray);
-	}
+    public void SetData(byte [] bytes)
+    {
+        throw new NotImplementedException();
+        //        this.Texture.LoadImage(bytes);
+        //        this.Size = new DDVector(this.Texture.width, this.Texture.height);
+    }
+//
+//	public void Draw (DDColor color)
+//	{
+//		if (_vertexFloats2 == null || _textureFloats == null)
+//			return;
+//
+//		var _colorVertex = new float[] {
+//			color.R, color.G, color.B, color.A,
+//			color.R, color.G, color.B, color.A,
+//			color.R, color.G, color.B, color.A,
+//			color.R, color.G, color.B, color.A,
+//		};
+//
+//		//if (!GL.IsTexture(_textureId))
+//		//{
+//		//    reload texture;
+//		//}
+//		
+//		GL1.BindTexture(All1.Texture2D, _textureId);
+//		GL1.CullFace(All1.FrontAndBack);
+//		GL1.FrontFace(All1.Cw);
+//
+//		GL1.Disable(All1.DepthTest);
+//		GL1.Disable(All1.Lighting);
+//		GL1.Disable(All1.AlphaTest);
+//		
+//		GL1.BlendFunc(All1.One, All1.OneMinusSrcAlpha);
+//		GL1.Enable(All1.Blend);
+//
+//
+//		GL1.EnableClientState (All1.VertexArray);
+//		GL1.EnableClientState (All1.ColorArray);
+//		GL1.EnableClientState(All1.TextureCoordArray);
+//
+//		GL1.VertexPointer (2, All1.Float, 0, _vertexFloats2);
+//		GL1.ColorPointer (4, All1.Float, 0, _colorVertex);
+//		GL1.TexCoordPointer(2, All1.Float, 0, _textureFloats);
+//
+//
+//		GL1.DrawArrays(All1.TriangleFan, 0, _vertexFloats2.Length / 2);
+//		
+//		GL1.DisableClientState(All1.VertexArray);
+//		GL1.DisableClientState(All1.ColorArray);
+//		GL1.DisableClientState(All1.TextureCoordArray);
+//	}
 }
 
 #endif

@@ -844,36 +844,36 @@ public partial class DDNode : IDisposable
 //        }
     }
 
-    [Obsolete]
-    public virtual DDAnimation RunAction(DDAnimation action)
-    {
-        if (action == null)
-        {
-            throw new ArgumentNullException("action");
-        }
-
-        DDActionManager.Instance.AddAction(action, this);
-
-        return action;
-    }
-    [Obsolete]
-    public void StopAllActions()
-    {
-        DDActionManager.Instance.RemoveAllActionsForTarget(this);
-    }
-    [Obsolete]
-    internal void StopAllActions(bool recoursive)
-    {
-        StopAllActions();
-        if (recoursive)
-            foreach (var child in Children)
-                child.StopAllActions(recoursive);
-    }
-    [Obsolete]
-    public void StopAction(DDAnimation action)
-    {
-        DDActionManager.Instance.RemoveAction(action, this);
-    }
+//    [Obsolete]
+//    public virtual DDAnimation RunAction(DDAnimation action)
+//    {
+//        if (action == null)
+//        {
+//            throw new ArgumentNullException("action");
+//        }
+//
+//        DDActionManager.Instance.AddAction(action, this);
+//
+//        return action;
+//    }
+//    [Obsolete]
+//    public void StopAllActions()
+//    {
+//        DDActionManager.Instance.RemoveAllActionsForTarget(this);
+//    }
+//    [Obsolete]
+//    internal void StopAllActions(bool recoursive)
+//    {
+//        StopAllActions();
+//        if (recoursive)
+//            foreach (var child in Children)
+//                child.StopAllActions(recoursive);
+//    }
+//    [Obsolete]
+//    public void StopAction(DDAnimation action)
+//    {
+//        DDActionManager.Instance.RemoveAction(action, this);
+//    }
 
     #endregion
 

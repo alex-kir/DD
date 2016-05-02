@@ -34,7 +34,7 @@ public class DDSprite : DDNode
     public DDTextureFrame Frame { get { return _frame; } }
     
 	private DDRenderer.Quad quad;
-	
+    private DD.Graphics.DDGraphicsMesh mesh;
 
     public DDSprite()
 	{
@@ -66,6 +66,8 @@ public class DDSprite : DDNode
 		_frame = frame;
 		Size = _frame.Size;
 		quad = _frame.BuildQuad();
+        mesh = DDRenderer.GetMesh2(quad);
+        mesh.Texture = _frame.Texture;
 	}
 
     public override DDVector Size
@@ -78,18 +80,25 @@ public class DDSprite : DDNode
         {
             if (base.Size != value) {
                 base.Size = value;
-                if (_frame != null)
+                if (_frame != null) {
                     quad = _frame.BuildQuad(value);
+                    mesh = DDRenderer.GetMesh2(quad);
+                    mesh.Texture = _frame.Texture;
+                }
             }
         }
     }
 	
     public override void Draw(DDRenderer renderer)
     {
-		quad.Matrix = this.NodeToWorldTransform();
-		quad.white_color1 = quad.white_color2 = quad.white_color3 = quad.white_color4 = this.CombinedColor;
-		quad.black_color1 = quad.black_color2 = quad.black_color3 = quad.black_color4 = this.CombinedColorBlack;
-		renderer.DrawQuad(_frame.Texture, quad);
+//		quad.Matrix = this.NodeToWorldTransform();
+//		quad.white_color1 = quad.white_color2 = quad.white_color3 = quad.white_color4 = this.CombinedColor;
+//		quad.black_color1 = quad.black_color2 = quad.black_color3 = quad.black_color4 = this.CombinedColorBlack;
+//		renderer.DrawQuad(_frame.Texture, quad);
+
+        mesh.SetWhiteColor(CombinedColor);
+        mesh.SetBlackColor(CombinedColorBlack);
+        renderer.Draw(mesh, null, NodeToWorldTransform());
     }
 
 	protected override DDTexture GetUsedTexture()

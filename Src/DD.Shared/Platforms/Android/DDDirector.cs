@@ -23,9 +23,6 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 //
-using Android.Widget;
-
-
 
 #if DD_PLATFORM_ANDROID
 
@@ -37,16 +34,16 @@ using Android.App;
 using Android.OS;
 using Android.Content.PM;
 using Android.Content;
+using Android.Widget;
 
-//using TOpenglView = DDDirector.Opengl2View;
-using TOpenglView = DDDirector.GLView;
+using TGameView = DD.Graphics.DDGraphicsAndroidGameView;
+//using TOpenglView = DDDirector.GLView;
 
 public partial class DDDirector
 {
     public FrameLayout RootLayout { get; private set; }
-    TOpenglView _glView;
+    TGameView _glView;
 
-    Func<DDScene> _initialScene;
     public Android.App.Activity Activity { get; private set; }
     DDRenderer renderer;
 
@@ -82,29 +79,21 @@ public partial class DDDirector
         //throw new NotImplementedException();
     }
 
-    private void UpdateWinSize()
-    {
-        WinSize = _glView.Size;
-    }
-
     public void OnCreate(Activity activity1, Bundle bundle, ScreenOrientation orientation, int frameRate, DDRenderer renderer, Func<DDScene> scene)
     {
         this.renderer = renderer;
         this.Activity = activity1;
-        this.FrameRate = frameRate;
         this.Activity.RequestWindowFeature(WindowFeatures.NoTitle);
         this.Activity.Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
         this.Activity.RequestedOrientation = orientation;
 
         _initialScene = scene;
-        DPI = DDUtils.GetDPI();
         DDTouchDispatcher.Instance.GetHashCode();
 
         RootLayout = new FrameLayout(this.Activity);
-        _glView = new TOpenglView(this.Activity, this);
+        _glView = new TGameView(this.Activity, this);
         RootLayout.AddView(_glView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent));
         this.Activity.SetContentView(RootLayout);
-
 
     }
 
@@ -124,19 +113,6 @@ public partial class DDDirector
             ActivityResult(new ActivityResultArgs(requestCode, resultCode, data));
     }
 
-    void SetInitialScene()
-    {
-        if (_initialScene != null)
-        {
-            SetScene(DDDirector.Instance._initialScene());
-            _initialScene = null;
-        }
-    }
-
-    void DrawScene()
-    {
-        OnDraw(renderer);
-    }
 }
 
 #endif

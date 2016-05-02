@@ -86,17 +86,30 @@ public static class DDAnimations
 
     public static DDAnimation Update(Action<float> onUpdate, float delay = 0)
     {
-        return new DDUpdate(onUpdate, delay);
+        DDDebug.Assert(onUpdate != null, "onUpdate must be not null");
+        float tmp = 0;
+        return new DDAnimation(null, (n, t) => {
+            tmp += t;
+            if (tmp >= delay) {
+                try {
+                    onUpdate(tmp);
+                }
+                catch (Exception ex) {
+                    DDDebug.LogException(ex);
+                }
+                tmp = 0;
+            }
+        }, () => false);
     }
 
     public static DDAnimation Update(Action onUpdate, float delay = 0)
     {
-        return new DDUpdate(dt => onUpdate(), delay);
+        return Update(dt => onUpdate(), delay);
     }
 
     public static DDIntervalAnimation Delay(float duration)
     {
-        return new DDDelayTime(duration);
+        return new DDIntervalAnimation<float>(duration, 0, n => 0, (n, v) => {}, DDMath.Lerp);
     }
 
     public static DDIntervalAnimation Exec(System.Action act)
@@ -156,6 +169,41 @@ public static class DDAnimations
     public static DDAnimation Repeat(this DDIntervalAnimation self, int times)
     {
         return new DDRepeat(self, times);
+    }
+
+    public static DDIntervalAnimation Ease(this DDIntervalAnimation action, Func<float,float> func)
+    {
+        return new DDEase(action, func);
+    }
+
+    public static DDIntervalAnimation EaseElasticIn(this DDIntervalAnimation action, float period = 0.4f)
+    {
+        return new DDEaseElasticIn(action, period);
+    }
+
+    public static DDIntervalAnimation EaseElasticOut(this DDIntervalAnimation action, float period = 0.4f)
+    {
+        return new DDEaseElasticOut(action, period);
+    }
+
+    public static DDIntervalAnimation EaseNurbs(this DDIntervalAnimation action, params float [] args)
+    {
+        return new DDEase(action, it => DDMath.Nurbs(it, args));
+    }
+
+    public static DDIntervalAnimation EaseBounceOut(this DDIntervalAnimation action, float period = 0.4f)
+    {
+        return new DDEaseBounceOut(action);
+    }
+
+    public static DDIntervalAnimation EaseTimeScale(this DDIntervalAnimation action, float multiplier)
+    {
+        return new DDEaseTimeScale(action, multiplier);
+    }
+
+    public static DDAnimation PlayEffect(string name, bool wait = false)
+    {
+        return new DDPlayEffect(name, wait);
     }
 }
 

@@ -23,34 +23,43 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 //
+
+
 #if DD_PLATFORM_IOS
 
 using System;
-using MonoTouch.CoreAnimation;
-using MonoTouch.Foundation;
-using MonoTouch.ObjCRuntime;
-using MonoTouch.OpenGLES;
-using MonoTouch.UIKit;
-using OpenTK;
-//using OpenTK.Graphics.ES20;
-using OpenTK.Platform.iPhoneOS;
-using All1 = OpenTK.Graphics.ES11.All;
-using GL1 = OpenTK.Graphics.ES11.GL;
+using CoreAnimation;
+using CoreGraphics;
+using Foundation;
+using ObjCRuntime;
+using OpenGLES;
+using UIKit;
+//using OpenTK;
+////using OpenTK.Graphics.ES20;
+//using OpenTK.Platform.iPhoneOS;
+//using All1 = OpenTK.Graphics.ES11.All;
+//using GL1 = OpenTK.Graphics.ES11.GL;
 
 public partial class DDDirector
 {
+    DDRenderer renderer = null;
+
 	UIWindow window;
-	OpenGLViewController viewController;
+//	OpenGLViewController viewController;
+//
+//	public EAGLRenderingAPI ContextRenderingApi {
+//		get
+//		{
+//			return ((EAGLView)viewController.View).ContextRenderingApi;
+//		}
+//	}
 
-	public EAGLRenderingAPI ContextRenderingApi {
-		get
-		{
-			return ((EAGLView)viewController.View).ContextRenderingApi;
-		}
-	}
-
-	public bool OnFinishedLaunching(UIApplication app, NSDictionary options)
+    public bool OnFinishedLaunching(UIApplication app, NSDictionary options, int frameRate, DDRenderer renderer, Func<DDScene> scene)
 	{
+
+        this.renderer = renderer;
+        this._initialScene = scene;
+
 		window = new UIWindow (UIScreen.MainScreen.Bounds);
 		
 		// load the appropriate UI, depending on whether the app is running on an iPhone or iPad
@@ -60,19 +69,33 @@ public partial class DDDirector
 //			viewController = new OpenGLViewController ("OpenGLViewController_iPad", null);
 //		}
 
-		viewController = new OpenGLViewController ();
+//		viewController = new OpenGLViewController ();
 
-		window.RootViewController = viewController;
+//		window.RootViewController = viewController;
+        window.RootViewController = new DD.Graphics.DDGraphicsGameViewController(this);
 
 		app.SetStatusBarHidden(true, false);
+
+//        WinSize = new DDVector(UIScreen.MainScreen.Bounds.Size) * UIScreen.MainScreen.Scale;
+//        FrameRate = frameRate;
 
 		// make the window visible
 		window.MakeKeyAndVisible ();
 
-		WinSize = new DDVector(UIScreen.MainScreen.Bounds.Size) * UIScreen.MainScreen.Scale;
-		FrameRate = 60;
 		return true;
 	}
+
+    public void Quit()
+    {
+        
+    }
+
+    public void StopAllAudioEffects()
+    {
+        //throw new NotImplementedException();
+    }
+        
+#if false
 
 	[Register ("OpenGLViewController")]
 	public partial class OpenGLViewController : UIViewController
@@ -142,10 +165,11 @@ public partial class DDDirector
 		{
 			LayerRetainsBacking = true;
 			LayerColorFormat = EAGLColorFormat.RGBA8;
+            ContentScaleFactor = UIScreen.MainScreen.Scale;
 		}
 
 		[Export("init")]
-		public EAGLView () : base(System.Drawing.RectangleF.Empty)
+        public EAGLView () : base(System.Drawing.RectangleF.Empty)
 		{
 			LayerRetainsBacking = true;
 			LayerColorFormat = EAGLColorFormat.RGBA8;
@@ -160,6 +184,10 @@ public partial class DDDirector
 		protected override void ConfigureLayer (CAEAGLLayer eaglLayer)
 		{
 			eaglLayer.Opaque = true;
+//            eaglLayer.ContentsScale = 2;
+            var s = 1;//UIScreen.MainScreen.Scale;
+            var b = UIScreen.MainScreen.Bounds.Size;
+            eaglLayer.Frame = new CGRect(0, 0, b.Width * s, b.Height * s);
 		}
 		
 		protected override void CreateFrameBuffer ()
@@ -174,6 +202,8 @@ public partial class DDDirector
 			
 //			if (ContextRenderingApi == EAGLRenderingAPI.OpenGLES2)
 //				LoadShaders ();
+
+            DDDirector.Instance.LoadInitialScene();
 		}
 		
 		protected override void DestroyFrameBuffer ()
@@ -261,9 +291,13 @@ public partial class DDDirector
 		protected override void OnRenderFrame (FrameEventArgs e)
 		{
 			base.OnRenderFrame (e);
+//            DDDebug.Trace();
 
-			float t = Math.Min(Math.Max((float)e.Time, 1f / DDDirector.Instance.FrameRate), 1f);
-			DDScheduler.Instance.OnTick(t);
+//			float t = Math.Min(Math.Max((float)e.Time, 1f / DDDirector.Instance.FrameRate), 1f);
+            var t = DDMath.Clamp(1f / DDDirector.Instance.FrameRate, 1f, (float)e.Time);
+//            DDDebug.Trace("e.Time:" + e.Time + ", t:" + t);
+
+            DDDirector.Instance.OnTick(t);
 
 			MakeCurrent ();
 
@@ -341,15 +375,18 @@ public partial class DDDirector
 			
 			GL1.Disable(All1.Lighting);
 
-			try
-			{
-				if (DDDirector.Instance.Scene != null)
-					DDDirector.Instance.Scene.Visit ();
-			}
-			catch(Exception ex)
-			{
-				DDDebug.Log(ex);
-			}
+//			try
+//			{
+//				if (DDDirector.Instance.Scene != null)
+//					DDDirector.Instance.Scene.Visit ();
+//			}
+//			catch(Exception ex)
+//			{
+//				DDDebug.Log(ex);
+//			}
+
+            DDDirector.Instance.DrawScene();
+
 			SwapBuffers ();
 		}
 		
@@ -502,9 +539,9 @@ public partial class DDDirector
 			foreach (UITouch touch in touches)
 			{
 				var location = touch.LocationInView(this);
-				float x = location.X * UIScreen.MainScreen.Scale;
-				float y = (this.Frame.Size.Height - location.Y) * UIScreen.MainScreen.Scale;
-				DDTouchDispatcher.Instance.OnTouch((int)touch.Handle, x, y, DDTouchPhase.Began);
+                var x = location.X * UIScreen.MainScreen.Scale;
+                var y = (this.Frame.Size.Height - location.Y) * UIScreen.MainScreen.Scale;
+                DDTouchDispatcher.Instance.OnTouch((int)touch.Handle, (float)x, (float)y, DDTouchPhase.Began);
 			}
 		}
 
@@ -514,9 +551,9 @@ public partial class DDDirector
 			foreach (UITouch touch in touches)
 			{
 				var location = touch.LocationInView(this);
-				float x = location.X * UIScreen.MainScreen.Scale;
-				float y = (this.Frame.Size.Height - location.Y) * UIScreen.MainScreen.Scale;
-				DDTouchDispatcher.Instance.OnTouch((int)touch.Handle, x, y, DDTouchPhase.Moved);
+                var x = location.X * UIScreen.MainScreen.Scale;
+                var y = (this.Frame.Size.Height - location.Y) * UIScreen.MainScreen.Scale;
+                DDTouchDispatcher.Instance.OnTouch((int)touch.Handle, (float)x, (float)y, DDTouchPhase.Moved);
 			}
 		}
 
@@ -526,9 +563,9 @@ public partial class DDDirector
 			foreach (UITouch touch in touches)
 			{
 				var location = touch.LocationInView(this);
-				float x = location.X * UIScreen.MainScreen.Scale;
-				float y = (this.Frame.Size.Height - location.Y) * UIScreen.MainScreen.Scale;
-				DDTouchDispatcher.Instance.OnTouch((int)touch.Handle, x, y, DDTouchPhase.Ended);
+				var x = location.X * UIScreen.MainScreen.Scale;
+				var y = (this.Frame.Size.Height - location.Y) * UIScreen.MainScreen.Scale;
+                DDTouchDispatcher.Instance.OnTouch((int)touch.Handle, (float)x, (float)y, DDTouchPhase.Ended);
 			}
 		}
 
@@ -538,13 +575,15 @@ public partial class DDDirector
 			foreach (UITouch touch in touches)
 			{
 				var location = touch.LocationInView(this);
-				float x = location.X * UIScreen.MainScreen.Scale;
-				float y = (this.Frame.Size.Height - location.Y) * UIScreen.MainScreen.Scale;
-				DDTouchDispatcher.Instance.OnTouch((int)touch.Handle, x, y, DDTouchPhase.Ended);
+				var x = location.X * UIScreen.MainScreen.Scale;
+				var y = (this.Frame.Size.Height - location.Y) * UIScreen.MainScreen.Scale;
+                DDTouchDispatcher.Instance.OnTouch((int)touch.Handle, (float)x, (float)y, DDTouchPhase.Ended);
 			}
 		}
 		#endregion
 	}
+#endif
+
 }
 
 #endif

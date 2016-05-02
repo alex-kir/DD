@@ -26,49 +26,49 @@
 using System;
 using System.Collections.Generic;
 
-public class DDTimer
-{
-    private float _elapsed = -1;
-    public int Priority { get; set; }
-    public float Interval { get; set; }
-    public Action<DDTimerEventArgs> Action { get; set; }
-
-    public DDTimer(int priority, float interval, Action<DDTimerEventArgs> action)
-    {
-        Priority = priority;
-        Interval = interval;
-        Action = action;
-    }
-
-    internal void OnTick(float delta)
-    {
-        if (_elapsed == -1)
-        {
-            _elapsed = 0;
-        }
-        _elapsed += delta;
-
-        if (_elapsed >= Interval)
-        {
-            Action(new DDTimerEventArgs(this, delta, _elapsed));
-            _elapsed = 0;
-        }
-    }
-}
-
-public class DDTimerEventArgs
-{
-    public float DeltaTime { get; private set; }
-    public float ElapsedTime { get; private set; }
-    public DDTimer Timer { get; private set; }
-
-    public DDTimerEventArgs(DDTimer timer, float deltaTime, float elapsedTime)
-    {
-        this.Timer = timer;
-        this.DeltaTime = deltaTime;
-        this.ElapsedTime = elapsedTime;
-    }
-}
+//public class DDTimer
+//{
+//    private float _elapsed = -1;
+//    public int Priority { get; set; }
+//    public float Interval { get; set; }
+//    public Action<DDTimerEventArgs> Action { get; set; }
+//
+//    public DDTimer(int priority, float interval, Action<DDTimerEventArgs> action)
+//    {
+//        Priority = priority;
+//        Interval = interval;
+//        Action = action;
+//    }
+//
+//    internal void OnTick(float delta)
+//    {
+//        if (_elapsed == -1)
+//        {
+//            _elapsed = 0;
+//        }
+//        _elapsed += delta;
+//
+//        if (_elapsed >= Interval)
+//        {
+//            Action(new DDTimerEventArgs(this, delta, _elapsed));
+//            _elapsed = 0;
+//        }
+//    }
+//}
+//
+//public class DDTimerEventArgs
+//{
+//    public float DeltaTime { get; private set; }
+//    public float ElapsedTime { get; private set; }
+//    public DDTimer Timer { get; private set; }
+//
+//    public DDTimerEventArgs(DDTimer timer, float deltaTime, float elapsedTime)
+//    {
+//        this.Timer = timer;
+//        this.DeltaTime = deltaTime;
+//        this.ElapsedTime = elapsedTime;
+//    }
+//}
 
 public class DDScheduler
 {
@@ -77,8 +77,6 @@ public class DDScheduler
 
     private readonly HashSet<DDNode> _animatedNodes = new HashSet<DDNode>();
 
-    private List<DDTimer> _timers = new List<DDTimer>();
-
     public float TimeScale { get; set; }
 	public float TimeSinceStart { get; private set; }
     public float TimeDelta { get; private set; }
@@ -86,7 +84,6 @@ public class DDScheduler
     private DDScheduler()
     {
         TimeScale = 1f;
-        _timers = new List<DDTimer>();
 		TimeSinceStart = 0;
     }
 
@@ -95,67 +92,11 @@ public class DDScheduler
         dt *= TimeScale;
         TimeDelta = dt;
 		TimeSinceStart += dt;
-        foreach (DDTimer timer in _timers)
-        {
-            timer.OnTick(dt);
-        }
 
         foreach (var node in _animatedNodes)
         {
             node.Animations.OnTick(dt);
-//            timer.OnTick(dt);
         }
-    }
-    [Obsolete]
-    public void Schedule(DDTimer timer)
-    {
-        if (timer == null)
-        {
-            throw new ArgumentNullException("timer");
-        }
-
-        DDDirector.Instance.PostMessage(() =>
-        {
-            if (!_timers.Contains(timer))
-            {
-                _timers.Add(timer);
-                _timers.Sort((t1, t2) => t1.Priority.CompareTo(t2.Priority));
-            }
-        });
-    }
-    [Obsolete]
-    public DDTimer Schedule(int priority, float interval, Action<DDTimerEventArgs> action)
-    {
-        if (action == null)
-        {
-            throw new ArgumentNullException("action");
-        }
-
-        var timer = new DDTimer(priority, interval, action);
-        Schedule(timer);
-        return timer;
-    }
-    [Obsolete]
-    public void Unschedule(DDTimer timer)
-    {
-        if (timer == null)
-        {
-            throw new ArgumentNullException("timer");
-        }
-        
-        DDDirector.Instance.PostMessage(() =>
-        {
-            if (_timers.Contains(timer))
-            {
-                _timers.Remove(timer);
-            }
-        });
-    }
-
-    [Obsolete]
-    public void UnscheduleAll()
-    {
-        DDDirector.Instance.PostMessage(() => { _timers.Clear(); });
     }
 
     public void RegisterForAnimations(DDNode node)

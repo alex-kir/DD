@@ -28,7 +28,7 @@ public class DDPlayEffect : DDIntervalAnimation
 	string _name;
 	
     public DDPlayEffect(string name, bool wait = false) :
-        base(wait ? DDAudio.Instance.GetLength(name) : 0)
+        base(wait ? DDAudio.GetLength(name) : 0)
     {
 		_name = name;
     }
@@ -36,6 +36,6 @@ public class DDPlayEffect : DDIntervalAnimation
 	protected override void Start(DDNode target)
     {
         base.Start(target);
-        DDAudio.Instance.PlayEffect(_name);
+        DDAudio.PlayEffect(_name);
     }
 }

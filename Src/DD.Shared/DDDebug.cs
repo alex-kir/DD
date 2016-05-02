@@ -32,6 +32,8 @@ using System.Linq;
 
 public static class DDDebug
 {
+    private static DateTime nextDump;
+
 	private class MeasureForUsing : IDisposable
 	{
 		public Stopwatch Stopwatch;
@@ -239,6 +241,12 @@ public static class DDDebug
 
 	public static void OnTick(float t)
 	{
+        if (nextDump < DateTime.Now) {
+            nextDump = DateTime.Now.AddSeconds(5);
+            DDDebug.Log("----------------\n" + GetDebugText());
+        }
+
+
 		foreach (var sw in _stopwatches.Values)
 		{
 			sw.Stopwatch.Reset();
@@ -276,17 +284,21 @@ public static class DDDebug
 	{
 		if (_infoLabel == null)
 			return null;
-
-		_info[" FPS"] = _fps.ToString("0.0");
-
-		foreach (var kv in _stopwatches)
-		{
-			_info[kv.Key] = kv.Value.Stopwatch.Elapsed.TotalMilliseconds.ToString("0.0ms") + "/" + kv.Value.Count;
-		}
-		
-		string debugText = string.Join("\n", _info.Select(it => it.Key + ":" + it.Value).OrderBy(it => it).ToArray());
-		_infoLabel.SetText(debugText);
+        
+        _infoLabel.SetText(GetDebugText());
 
 		return _infoLabel;
 	}
+
+    private static string GetDebugText()
+    {
+        _info[" FPS"] = _fps.ToString("0.0");
+
+        foreach (var kv in _stopwatches) {
+            _info[kv.Key] = kv.Value.Stopwatch.Elapsed.TotalMilliseconds.ToString("0.0ms") + "/" + kv.Value.Count;
+        }
+
+        string debugText = string.Join("\n", _info.Select(it => it.Key + ":" + it.Value).OrderBy(it => it).ToArray());
+        return debugText;
+    }
 }

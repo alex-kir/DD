@@ -25,7 +25,8 @@
 //
 
 
-#if DD_PLATFORM_ANDROID
+#if DD_PLATFORM_ANDROID && false// || DD_PLATFORM_IOS
+
 using System;
 using OpenTK.Graphics.ES11;
 
@@ -81,12 +82,29 @@ public partial class DDRenderer
             quad._xy4.X, quad._xy4.Y, 0,
         };
 
+//        var uvs = new float[] {
+//            quad.uv1.X, quad.uv1.Y,
+//            quad.uv2.X, quad.uv2.Y,
+//            quad.uv3.X, quad.uv3.Y,
+//            quad.uv4.X, quad.uv4.Y,
+//        };
+
+#if DD_PLATFORM_IOS
+        var uvs = new float[] {
+            quad.uv1.X, 1 - quad.uv1.Y,
+            quad.uv2.X, 1 - quad.uv2.Y,
+            quad.uv3.X, 1 - quad.uv3.Y,
+            quad.uv4.X, 1 - quad.uv4.Y,
+        };
+#else
         var uvs = new float[] {
             quad.uv1.X, quad.uv1.Y,
             quad.uv2.X, quad.uv2.Y,
             quad.uv3.X, quad.uv3.Y,
             quad.uv4.X, quad.uv4.Y,
         };
+#endif
+
 
         GL.VertexPointer(3, All.Float, 0, vertices);
         GL.EnableClientState(All.VertexArray);
@@ -163,7 +181,7 @@ public partial class DDRenderer
             frame.Right, frame.Top,
             frame.Right, frame.Bottom
         };
-
+        
         GL.VertexPointer(3, All.Float, 0, vertices);
         GL.EnableClientState(All.VertexArray);
 

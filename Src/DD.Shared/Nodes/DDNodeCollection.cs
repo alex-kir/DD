@@ -24,23 +24,25 @@ public class DDNodeCollection : ICollection<DDNode>
 		_owner = owner;
 	}
 
-    public T Add<T>(T item, int zOrder) where T : DDNode
-	{
-        item.ZOrder = zOrder;
-        return Add(item);
-    }
-
-    public T Add<T>(T item) where T : DDNode
-    {
-        Add((DDNode)item);
-		return item;
-	}
+//    [Obsolete]
+//    public T Add<T>(T item, int zOrder) where T : DDNode
+//	{
+//        item.ZOrder = zOrder;
+//        return Add(item);
+//    }
+//
+//    [Obsolete]
+//    public T Add<T>(T item) where T : DDNode
+//    {
+//        Add((DDNode)item);
+//		return item;
+//	}
 
     public void Add(DDNode item)
     {
         if (item.Parent != null)
         {
-            throw new ArgumentException("Child already has a parent", "child");
+            throw new ArgumentException("Child already has a parent", "item");
         }
 
 

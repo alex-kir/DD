@@ -1,4 +1,7 @@
-﻿using System;
+﻿
+#if false
+
+using System;
 using OpenTK.Graphics.ES20;
 
 
@@ -322,3 +325,4 @@ public class DDShader : IDisposable
     }
 }
 
+#endif

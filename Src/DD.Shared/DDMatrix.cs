@@ -78,6 +78,7 @@ public class DDMatrix
 	
 	public void MakeTransform(DDVector translation, DDVector rotationIdDegrees, DDVector scale)
 	{
+        MakeIdentity();
 		const float radian = 1f / 180f * DDMath.PI;
         float rx = rotationIdDegrees.X * radian;
         float ry = rotationIdDegrees.Y * radian;
@@ -523,7 +524,7 @@ public class DDMatrix
         return r;
     }
 	
-#elif DD_PLATFORM_ANDROID
+#elif DD_PLATFORM_ANDROID || DD_PLATFORM_IOS
 	
 	public static implicit operator float[](DDMatrix m)
     {

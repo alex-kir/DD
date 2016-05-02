@@ -36,6 +36,8 @@ using System.IO;
 using WindowsStore.Compatibility.IO;
 #endif
 
+using aa = DDAnimations;
+
 public class DDScene : DDNode
 {
 
@@ -55,7 +57,7 @@ public class DDScene : DDNode
         : base()
     {
         AnchorPoint = DDVector.LeftBottom;
-        Size = DDDirector.Instance.WinSize;
+        Size = DDDirector.Instance.ScreenResolution;
         Position = DDVector.Zero; // ignored for root node like scene.
     }
 
@@ -66,14 +68,14 @@ public class DDScene : DDNode
         adjusted = true;
 
         {
-            var wsz = DDDirector.Instance.WinSize;
+            var wsz = DDDirector.Instance.ScreenResolution;
             this.Size = (wsz.Width > wsz.Height) ? new DDVector(wsz.Height, wsz.Width) : wsz;
             this.Size = this.Size * (width / this.Size.Width);
         }
 
         Action correctScaleRotateAnchor = () =>
         {
-            var wsz = DDDirector.Instance.WinSize;
+            var wsz = DDDirector.Instance.ScreenResolution;
             if (wsz.Width > wsz.Height)
             {
                 this.Rotation = -90;
@@ -90,11 +92,6 @@ public class DDScene : DDNode
 
         correctScaleRotateAnchor();
 
-//        this.RunAction(new DDUpdate(() =>
-//        {
-//            correctScaleRotateAnchor();
-//        }));
-        var aa = DDAnimationBuilder.Shared;
         this.Animations.Add(aa.Update(correctScaleRotateAnchor));
     }
 
@@ -105,14 +102,14 @@ public class DDScene : DDNode
         adjusted = true;
 
         {
-            var wsz = DDDirector.Instance.WinSize;
+            var wsz = DDDirector.Instance.ScreenResolution;
             this.Size = (wsz.Width < wsz.Height) ? new DDVector(wsz.Height, wsz.Width) : wsz;
             this.Size = this.Size * (height / this.Size.Height);
         }
 
         Action correctScaleRotateAnchor = () =>
         {
-            var wsz = DDDirector.Instance.WinSize;
+            var wsz = DDDirector.Instance.ScreenResolution;
             if (wsz.Width < wsz.Height)
             {
                 this.Rotation = -90;
@@ -129,7 +126,6 @@ public class DDScene : DDNode
 
         correctScaleRotateAnchor();
 
-        var aa = DDAnimationBuilder.Shared;
         this.Animations.Add(aa.Update(correctScaleRotateAnchor));
     }
 

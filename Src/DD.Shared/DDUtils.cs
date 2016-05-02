@@ -18,11 +18,11 @@ public static class DDUtils
         return string.Format(self, args);
     }
 
-    public static T Assign<T>(this T self, ref T variable)
-    {
-        variable = self;
-        return self;
-    }
+//    public static T Assign<T>(this T self, ref T variable)
+//    {
+//        variable = self;
+//        return self;
+//    }
 
     public static void OpenMarketForApp(string iosId, string androidId)
     {
@@ -37,6 +37,7 @@ public static class DDUtils
 
     public static void OpenUri(string uri)
     {
+        DDDebug.Trace(uri);
 #if DD_PLATFORM_ANDROID
         DDDirector.Instance.Activity.StartActivity(
             new global::Android.Content.Intent(global::Android.Content.Intent.ActionView)
@@ -78,6 +79,49 @@ public static class DDUtils
         GetWriter().Commit();
     }
 
+    #elif DD_PLATFORM_IOS
+
+    public static string LoadString(string key, string defolt)
+    {
+        return Foundation.NSUserDefaults.StandardUserDefaults.StringForKey(key) ?? defolt;
+    }
+
+    public static void SaveString(string key, string value)
+    {
+        Foundation.NSUserDefaults.StandardUserDefaults.SetString(value, key);
+    }
+
     #endif
+
+    public static bool LoadBool(string key, bool defolt)
+    {
+        var s = LoadString(key, null);
+        if (s == null)
+            return defolt;
+        return s == "true";
+    }
+
+    public static void SaveBool(string key, bool value)
+    {
+        SaveString(key, value ? "true" : "false");
+    }
+
+    public static int LoadInt(string key, int defolt)
+    {
+        int ret;
+        if (int.TryParse(LoadString(key, ""), out ret))
+            return ret;
+        return defolt;
+    }
+
+    public static void SaveInt(string key, int value)
+    {
+        SaveString(key, value.ToString());
+    }
+
+    public static void CatchAllTaps(this DDNode self)
+    {
+        self.AddTouchHandler(DDTouchPhase.Began | DDTouchPhase.Moved | DDTouchPhase.Ended, args => args.Processed = true);
+    }
 }
 

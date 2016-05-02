@@ -27,9 +27,38 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using OpenTK.Graphics.ES20;
 
 public partial class DDTexture
 {
     public DDVector Size { get; private set; }
 	public string Name { get; private set; }
+
+    public DDTexture()
+    {
+        Name = null;
+        const int width = 4;
+        const int height = 4;
+        Size = new DDVector(width, height);
+
+        GL.GenTextures(1, out _textureId);
+        GL.BindTexture(TextureTarget.Texture2D, _textureId);
+
+        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);//All.Nearest);
+        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);//Repeat
+        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);//ClampToEdge
+
+        byte[] pixels = new byte[width * height * 4]
+        {
+            255, 255, 255, 255,  255, 255, 255, 255,  255, 255, 255, 255,  255, 255, 255, 255,
+            255, 255, 255, 255,  255, 255, 255, 255,  255, 255, 255, 255,  255, 255, 255, 255,
+            255, 255, 255, 255,  255, 255, 255, 255,  255, 255, 255, 255,  255, 255, 255, 255,
+            255, 255, 255, 255,  255, 255, 255, 255,  255, 255, 255, 255,  255, 255, 255, 255,
+        };
+
+        GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba,
+            width, height, 0,
+            PixelFormat.Rgba, PixelType.UnsignedByte, pixels);
+    }
 }

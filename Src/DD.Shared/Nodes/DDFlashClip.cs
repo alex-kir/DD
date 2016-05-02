@@ -28,6 +28,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Globalization;
 
+using aa = DDAnimations;
+
 public class DDFlashClip : DDNode
 {
     public class DDFlashMatrixTo : DDIntervalAnimation
@@ -289,7 +291,7 @@ public class DDFlashClip : DDNode
                 if (xnode1 == null)
                 {
                     DDDebug.Log("[DDFlashClip], ", root.GetAttribute("name", "?"), " / ", layerName, ", first frame is empty, ", frame1.GetAttribute("index", "?"));
-                    action = new DDDelayTime(0);
+                    action = aa.Delay(0);
                 }
                 else
                 {
@@ -301,7 +303,7 @@ public class DDFlashClip : DDNode
                     DDColor color;
                     ExtractColor(xnode1, out color);
 
-                    action = new DDFlashMatrixTo(duration, a, b, c, d, x, y) & new DDColorTo(duration, color);
+                    action = new DDFlashMatrixTo(duration, a, b, c, d, x, y) & aa.ColorTo(duration, color);
                 }
             }
 
@@ -318,7 +320,7 @@ public class DDFlashClip : DDNode
                 if (xnode1 == null || xnode2 == null)
                 {
                     DDDebug.Log("[DDFlashClip], ", root.GetAttribute("name", "?"), " / ", layer.GetAttribute("name", "?"), ", empty frames ", frame1.GetAttribute("index", "?"), "->", frame2.GetAttribute("index", "?"));
-                    action = action + new DDDelayTime(duration);
+                    action = action + aa.Delay(duration);
                 }
                 else
                 {
@@ -328,7 +330,7 @@ public class DDFlashClip : DDNode
                     DDColor color;
                     ExtractColor(xnode2, out color);
 
-                    action = action + (new DDFlashMatrixTo(duration, a, b, c, d, x, y) & new DDColorTo(duration, color));
+                    action = action + (new DDFlashMatrixTo(duration, a, b, c, d, x, y) & aa.ColorTo(duration, color));
                 }
             }
 

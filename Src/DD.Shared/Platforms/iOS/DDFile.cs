@@ -23,34 +23,34 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 //
-#if DD_PLATFORM_IOS
-
-using System;
-using System.Linq;
-using MonoTouch.Foundation;
-
-public partial class DDFile
-{
-	public static byte[] GetBytes (string name)
-	{
-		DDDebug.Log ("GetBytes (", name, ")");
-		string path = NSBundle.MainBundle.ResourcePath;
-		var files = from f in System.IO.Directory.GetFiles (path)
-			where f.Contains ("/" + name + ".")
-				select f;
-		return System.IO.File.ReadAllBytes (files.First());
-	}
-
-	public static NSData GetData (string name)
-	{
-		DDDebug.Log ("GetData (", name, ")");
-		string path = NSBundle.MainBundle.ResourcePath;
-		var files = from f in System.IO.Directory.GetFiles (path)
-				where f.Contains ("/" + name + ".")
-				select f;
-
-		return NSData.FromFile (files.First());
-	}
-}
-
-#endif
+//#if DD_PLATFORM_IOS
+//
+//using System;
+//using System.Linq;
+//using Foundation;
+//
+//public partial class DDFile
+//{
+////	public static byte[] GetBytes (string name)
+////	{
+////		DDDebug.Log ("GetBytes (", name, ")");
+////		string path = NSBundle.MainBundle.ResourcePath;
+////		var files = from f in System.IO.Directory.GetFiles (path)
+////			where f.Contains ("/" + name + ".")
+////				select f;
+////		return System.IO.File.ReadAllBytes (files.First());
+////	}
+//
+////	public static NSData GetData (string name)
+////	{
+////		DDDebug.Log ("GetData (", name, ")");
+////		string path = NSBundle.MainBundle.ResourcePath;
+////		var files = from f in System.IO.Directory.GetFiles (path)
+////				where f.Contains ("/" + name + ".")
+////				select f;
+////
+////		return NSData.FromFile (files.First());
+////	}
+//}
+//
+//#endif

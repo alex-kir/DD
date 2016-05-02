@@ -72,11 +72,7 @@ public partial class DDFile
         return filenames.FirstOrDefault();
     }
 
-    public static string GetString(string name)
-    {
-        var bytes = GetBytes(name);
-        return Encoding.UTF8.GetString(bytes);
-    }
+
 
     public static void PutString(string name, string value)
     {

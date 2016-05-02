@@ -65,6 +65,8 @@ public class DDFont
 	private int _scaleW;
     private float _lineHeight;
     public float LineHeight { get { return _lineHeight; } }
+    private float _lineBase;
+    public float LineBase { get { return _lineBase; } }
 	private float _upperBound;
 	private float _lowerBound;
     System.Text.Encoding _encoding = null; // !!! encoding of chars in BM file !!!
@@ -78,7 +80,8 @@ public class DDFont
 		
         ParseConfigFile(fontFileName);
         Texture = DDTextureManager.Instance.GetNamedTexture(_textureName);
-#if DD_PLATFORM_UNITY3D
+
+#if DD_PLATFORM_UNITY3D || DD_PLATFORM_IOS
 		FlipCharsInfo();
 #endif
         if (Default == null)
@@ -102,6 +105,7 @@ public class DDFont
                 _lineHeight = float.Parse(DDXml.StringBetween(line, "lineHeight=", " ", null)) * _upperBound;
 				_scaleW = int.Parse(DDXml.StringBetween(line, "scaleW=", " ", null));
 				_scaleH = int.Parse(DDXml.StringBetween(line, "scaleH=", " ", null));
+                _lineBase = int.Parse(DDXml.StringBetween(line, "base=", " ", null));
             }
             else if (line.StartsWith("page id"))
             {

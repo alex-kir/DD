@@ -22,7 +22,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)DDMatrix.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DDPhysicsLayer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DDRectangle.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DDRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DDScheduler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DDTexture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DDTextureFrame.cs" />
@@ -30,7 +29,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)DDTouchDispatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DDVector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DDXml.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Actions\DDActionManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Actions\DDAnimation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Actions\DDPlayClip.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Actions\DDPlayEffect.cs" />
@@ -69,11 +67,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Nodes\DDSurface.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nodes\DDUserData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Platforms\Android\DDDirector.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Android\DDFile.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Android\DDRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Platforms\Android\DDTexture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Platforms\iOS\DDDirector.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Platforms\iOS\DDFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Platforms\iOS\DDTexture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Platforms\Unity3d\DDDirector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Platforms\Unity3d\DDFile.cs" />
@@ -85,15 +80,16 @@
     <Compile Include="$(MSBuildThisFileDirectory)Platforms\Win32\DDRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Platforms\Win32\DDTexture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DDUtils.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Actions\DDAnimationBuilder.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Actions\DDIntervalAnimation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Actions\DDAnimations.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Nodes\DDNodeTaps.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nodes\DDText.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Android\DDDirector.GLView.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Android\DDDirector.Opengl2View.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Android\DDShader.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Android\DDRendererGL2.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Android\DDAudio.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\iOS\DDAudio.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\iOS\DDGraphicsGameViewController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\DDGraphics.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\DDGraphicsProgram.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\DDGraphicsMesh.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\DDRenderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms\Android\DDGraphicsAndroidGameView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)DDShader.shader" />
@@ -106,5 +102,6 @@
     <Folder Include="$(MSBuildThisFileDirectory)Actions\Ease\" />
     <Folder Include="$(MSBuildThisFileDirectory)Nodes\" />
     <Folder Include="$(MSBuildThisFileDirectory)Platforms\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Graphics\" />
   </ItemGroup>
 </Project>

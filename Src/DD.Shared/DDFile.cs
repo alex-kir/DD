@@ -88,6 +88,12 @@ public partial class DDFile
         return bytes == null ? null : new MemoryStream(bytes);
     }
 
+    public static string GetString(string name)
+    {
+        var bytes = GetBytes(name);
+        return Encoding.UTF8.GetString(bytes);
+    }
+
     public static byte[] GetBytes(string resourceName)
     {
         var name = CompleteName(resourceName);
@@ -102,6 +108,25 @@ public partial class DDFile
                 return bytes;
             }
         }
+    }
+
+    public static string GetPath(string name)
+    {
+        #if DD_PLATFORM_ANDROID
+        var folder = Path.Combine(DDDirector.Instance.Activity.CacheDir.AbsolutePath, "resources");
+        #elif DD_PLATFORM_IOS
+        var documents = Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments);
+        var folder = Path.Combine (documents, "..", "tmp", "resources");
+        #endif
+
+        if (!Directory.Exists(folder))
+            Directory.CreateDirectory(folder);
+        var new_path = Path.Combine(folder, name);
+        if (!File.Exists(new_path)) {
+            var bytes = DDFile.GetBytes(name);
+            File.WriteAllBytes(new_path, bytes);
+        }
+        return new_path;
     }
 
 
